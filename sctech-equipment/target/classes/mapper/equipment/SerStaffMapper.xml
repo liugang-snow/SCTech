@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sctech.equipment.mapper.SerStaffMapper">
+    
+    <resultMap type="SerStaff" id="SerStaffResult">
+        <result property="staffId"    column="staff_id"    />
+        <result property="staffGuid"    column="staff_guid"    />
+        <result property="userId"    column="user_id"    />
+        <result property="teamId"    column="team_id"    />
+        <result property="staffPost"    column="staff_post"    />
+        <result property="remark"    column="remark"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSerStaffVo">
+        select s.*, u.user_name as userName, t.team_name as teamName from ser_staff as s
+        left join sys_user as u on u.user_id = s.user_id
+    	left join ser_team as t on t.team_id = s.team_id
+    </sql>
+
+    <select id="selectSerStaffList" parameterType="SerStaff" resultMap="SerStaffResult">
+        <include refid="selectSerStaffVo"/>
+        <where> 
+            <if test="userName != null "> u.user_name like concat('%', #{userName}, '%')</if>  
+            <if test="teamId != null and teamId != ''"> 
+            	and ( s.team_id = #{teamId} or s.team_id in ( select t.team_id from ser_team t where find_in_set ( #{teamId}, ancestors )))
+           	</if>  
+            and s.del_flag = '0'
+        	order by s.create_time asc        
+        </where>
+    </select>
+    
+    <select id="selectSerStaffById" parameterType="Long" resultMap="SerStaffResult">
+        <include refid="selectSerStaffVo"/>
+        where s.staff_id = #{staffId}
+    </select>
+        
+    <insert id="insertSerStaff" parameterType="SerStaff" useGeneratedKeys="true" keyProperty="staffId">
+        insert into ser_staff
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="staffGuid != null  and staffGuid != ''">staff_guid,</if>
+            <if test="userId != null ">user_id,</if>
+            <if test="teamId != null ">team_id,</if>
+            <if test="staffPost != null  and staffPost != ''">staff_post,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="staffGuid != null  and staffGuid != ''">#{staffGuid},</if>
+            <if test="userId != null ">#{userId},</if>
+            <if test="teamId != null ">#{teamId},</if>
+            <if test="staffPost != null  and staffPost != ''">#{staffPost},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSerStaff" parameterType="SerStaff">
+        update ser_staff
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="staffGuid != null  and staffGuid != ''">staff_guid = #{staffGuid},</if>
+            <if test="userId != null ">user_id = #{userId},</if>
+            <if test="teamId != null ">team_id = #{teamId},</if>
+            <if test="staffPost != null  and staffPost != ''">staff_post = #{staffPost},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where staff_id = #{staffId}
+    </update>
+
+    <delete id="deleteSerStaffById" parameterType="Long">
+        update ser_staff set del_flag = '2' where staff_id = #{staffId}
+    </delete>
+
+    <delete id="deleteSerStaffByIds" parameterType="String">
+        update ser_staff set del_flag = '2' where staff_id in
+        <foreach item="staffId" collection="array" open="(" separator="," close=")">
+            #{staffId}
+        </foreach>
+    </delete>
+    
+</mapper>

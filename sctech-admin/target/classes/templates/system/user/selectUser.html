@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('设备档案选择供应商')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <input name="uId" type="hidden" id="uId"/>
+        <input name="uName" type="hidden" id="uName"/>
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <p>人员名称：</p>
+                                <input type="text" name="userName"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+    	var prefix = ctx + "system/user";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+		        sortName: "createTime",
+		        sortOrder: "desc",
+                modalName: "用户",
+		        showSearch: false,
+		        showRefresh: false,
+		        showToggle: false,
+		        showColumns: false,
+		        clickToSelect: true,
+		        rememberSelected: true,
+                columns: [{
+                	radio: true,
+                },
+                {
+		            field: 'userId',
+		            title: '用户ID'
+		        },
+		        {
+		            field: 'userName',
+		            title: '用户名称'
+		        },
+		        {
+		            field: 'dept.deptName',
+		            title: '部门'
+		        }]
+            };
+            $.table.init(options);
+        });
+        
+        $("#bootstrap-table").on("check.bs.table", function () {         //点击radio触发事件
+        	var arrselections = $("#bootstrap-table").bootstrapTable('getSelections');
+        	$("#uId").val(arrselections[0].userId);
+    		$("#uName").val(arrselections[0].userName);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('维修班组列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>                          
+                            <li>
+                                <p>班组名称：</p>
+                                <input type="text" name="teamName"/>
+                            </li>
+                            <li>
+                                <p>班组编码：</p>
+                                <input type="text" name="teamCode"/>
+                            </li>
+                            <li>
+                                <p>状态 ：</p>
+                                <select name="status" th:with="type=${@dict.getType('sys_normal_disable')}">
+									<option value="">所有</option>
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+								</select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.treeTable.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add(1)" shiro:hasPermission="equipment:serteam:add">
+                    <i class="fa fa-plus"></i> 新增
+                </a>
+                <a class="btn btn-primary" onclick="$.operate.edit()" shiro:hasPermission="equipment:serteam:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-info" id="expandAllBtn">
+                    <i class="fa fa-exchange"></i> 展开/折叠
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-tree-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var addFlag = [[${@permission.hasPermi('equipment:serteam:add')}]];
+        var editFlag = [[${@permission.hasPermi('equipment:serteam:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('equipment:serteam:remove')}]];
+        var prefix = ctx + "equipment/serteam";
+
+        $(function() {
+            var options = {
+                code: "teamId",
+                parentCode: "parentId",
+                uniqueId: "teamId",
+                url: prefix + "/list",
+                createUrl: prefix + "/add/{id}",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove/{id}",
+                exportUrl: prefix + "/export",
+                modalName: "维修班组",
+                columns: [{
+                    field: 'selectItem', 
+                    radio: true
+                },
+                {
+                    field : 'teamName', 
+                    title : '班组名称',
+                    align: 'left'
+                },                
+                {
+                    field : 'teamCode', 
+                    title : '班组编码',
+                    align: 'left'
+                },
+                {
+                    field : 'deptName', 
+                    title : '所属部门',
+                    align: 'left'
+                },
+                {
+                    field : 'orderNum', 
+                    title : '显示顺序',
+                    align: 'left'
+                },
+                {
+                    title : '状态 ',
+                    align: 'left',
+                    formatter: function (value, row, index) {
+		        		return statusTools(row);
+		        	}
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    align: 'left',
+                    formatter: function(value, row, index) {
+                    	if (row.parentId != 0) {
+                        	var actions = [];
+                        	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.teamId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        	actions.push('<a class="btn btn-info  btn-xs ' + addFlag + '" href="javascript:void(0)" onclick="$.operate.add(\'' + row.teamId + '\')"><i class="fa fa-plus"></i>新增</a> ');
+                        	actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.teamId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        	return actions.join('');
+                    	} else {
+                    		return "";
+                    	}
+                    }
+                }]
+            };
+            $.treeTable.init(options);
+        });
+        
+        /* 状态显示 */
+		function statusTools(row) {
+		    if (row.status == 1) {
+    			return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.teamId + '\')"></i> ';
+    		} else {
+    			return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.teamId + '\')"></i> ';
+    		}
+		}
+        
+		/* 维修班组管理-停用 */
+		function disable(teamId) {
+			$.modal.confirm("确认要停用该班组吗？", function() {
+				$.operate.post(prefix + "/changeStatus", { "teamId": teamId, "status": 1 });
+		    })
+		}
+
+		/* 维修班组管理-启用 */
+		function enable(teamId) {
+			$.modal.confirm("确认要启用该班组吗？", function() {
+				$.operate.post(prefix + "/changeStatus", { "teamId": teamId, "status": 0 });
+		    })
+		}
+    </script>
+</body>
+</html>

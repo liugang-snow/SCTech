@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sctech.equipment.mapper.SerClassMapper">
+    
+    <resultMap type="SerClass" id="SerClassResult">
+        <result property="sclassId"    column="sclass_id"    />
+        <result property="sclassGuid"    column="sclass_guid"    />
+        <result property="sclassCode"    column="sclass_code"    />
+        <result property="sclassName"    column="sclass_name"    />
+        <result property="sclassTime"    column="sclass_time"    />
+        <result property="sclassEmergency"    column="sclass_emergency"    />
+        <result property="teamId"    column="team_id"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="ancestors"    column="ancestors"    />
+        <result property="fullname"    column="fullname"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="parentName" column="parent_name" />
+    </resultMap>
+
+    <sql id="selectSerClassVo">
+        select c.*, t.team_name as teamName from ser_class c
+        left join ser_team t on t.team_id = c.team_id
+    </sql>
+
+    <select id="selectSerClassList" parameterType="SerClass" resultMap="SerClassResult">
+        <include refid="selectSerClassVo"/>
+        <where>  
+            <if test="sclassCode != null  and sclassCode != ''"> and sclass_code like concat('%', #{sclassCode}, '%')</if>
+            <if test="sclassName != null  and sclassName != ''"> and sclass_name like concat('%', #{sclassName}, '%')</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+        and c.del_flag = '0'
+        order by c.parent_id, c.order_num
+    </select>
+    
+    <select id="selectSerClassById" parameterType="Long" resultMap="SerClassResult">
+        select t.sclass_id, t.sclass_guid, t.sclass_code, t.sclass_name, t.sclass_time, t.sclass_emergency, t.team_id, t.parent_id, t.ancestors, t.fullname, t.order_num, t.status, t.remark, t.del_flag, t.create_by, t.create_time, t.update_by, t.update_time, p.sclass_name as parent_name
+        ,s.team_name as teamName
+        from ser_class t
+        left join ser_class p on p.sclass_id = t.parent_id
+        left join ser_team s on s.team_id = t.team_id
+        where t.sclass_id = #{sclassId}
+    </select>
+        
+    <insert id="insertSerClass" parameterType="SerClass" useGeneratedKeys="true" keyProperty="sclassId">
+        insert into ser_class
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sclassGuid != null  and sclassGuid != ''">sclass_guid,</if>
+            <if test="sclassCode != null  and sclassCode != ''">sclass_code,</if>
+            <if test="sclassName != null  and sclassName != ''">sclass_name,</if>
+            <if test="sclassTime != null ">sclass_time,</if>
+            <if test="sclassEmergency != null  and sclassEmergency != ''">sclass_emergency,</if>
+            <if test="teamId != null ">team_id,</if>
+            <if test="parentId != null ">parent_id,</if>
+            <if test="ancestors != null  and ancestors != ''">ancestors,</if>
+            <if test="fullname != null  and fullname != ''">fullname,</if>
+            <if test="orderNum != null ">order_num,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sclassGuid != null  and sclassGuid != ''">#{sclassGuid},</if>
+            <if test="sclassCode != null  and sclassCode != ''">#{sclassCode},</if>
+            <if test="sclassName != null  and sclassName != ''">#{sclassName},</if>
+            <if test="sclassTime != null ">#{sclassTime},</if>
+            <if test="sclassEmergency != null  and sclassEmergency != ''">#{sclassEmergency},</if>
+            <if test="teamId != null ">#{teamId},</if>
+            <if test="parentId != null ">#{parentId},</if>
+            <if test="ancestors != null  and ancestors != ''">#{ancestors},</if>
+            <if test="fullname != null  and fullname != ''">#{fullname},</if>
+            <if test="orderNum != null ">#{orderNum},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSerClass" parameterType="SerClass">
+        update ser_class
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sclassGuid != null  and sclassGuid != ''">sclass_guid = #{sclassGuid},</if>
+            <if test="sclassCode != null  and sclassCode != ''">sclass_code = #{sclassCode},</if>
+            <if test="sclassName != null  and sclassName != ''">sclass_name = #{sclassName},</if>
+            <if test="sclassTime != null ">sclass_time = #{sclassTime},</if>
+            <if test="sclassEmergency != null  and sclassEmergency != ''">sclass_emergency = #{sclassEmergency},</if>
+            <if test="teamId != null ">team_id = #{teamId},</if>
+            <if test="parentId != null ">parent_id = #{parentId},</if>
+            <if test="ancestors != null  and ancestors != ''">ancestors = #{ancestors},</if>
+            <if test="fullname != null  and fullname != ''">fullname = #{fullname},</if>
+            <if test="orderNum != null ">order_num = #{orderNum},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where sclass_id = #{sclassId}
+    </update>
+
+    <delete id="deleteSerClassById" parameterType="Long">
+        update ser_class set del_flag = '2' where sclass_id = #{sclassId}
+    </delete>
+
+    <delete id="deleteSerClassByIds" parameterType="String">
+        update ser_class set del_flag = '2' where sclass_id in
+        <foreach item="sclassId" collection="array" open="(" separator="," close=")">
+            #{sclassId}
+        </foreach>
+    </delete>
+    
+</mapper>

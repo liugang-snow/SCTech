@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('查看设备合同')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-equcontract-detail" th:object="${equContract}">
+            <h4 class="form-header h4">基本信息</h4>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label ">合同编号：</label>
+                <div class="col-sm-8">
+                	<div class="form-control-static color-slategray" th:text="${equContract.conCode}"></div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label ">合同名称：</label>
+                <div class="col-sm-8">
+                	<div class="form-control-static color-slategray" th:text="${equContract.conName}"></div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label ">合同金额(万元)：</label>
+                <div class="col-sm-2">
+                	<div class="form-control-static color-slategray" th:text="${equContract.conAmount}"></div>
+                </div>   
+                <label class="col-sm-3 control-label ">签订日期：</label>
+                <div class="col-sm-3">
+                	<div class="form-control-static color-slategray" th:text="${#dates.format(equContract.conTime, 'yyyy-MM-dd')}"></div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label ">合同甲方：</label>
+                <div class="col-sm-8">
+                	<div class="form-control-static color-slategray" th:text="${equContract.conFirst}"></div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label ">甲方联系人：</label>
+                <div class="col-sm-2">
+                	<div class="form-control-static color-slategray" th:text="${equContract.firstContacts}"></div>
+                </div>   
+                <label class="col-sm-3 control-label ">甲方联系方式：</label>
+                <div class="col-sm-3">
+                	<div class="form-control-static color-slategray" th:text="${equContract.firstPhone}"></div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label ">合同乙方：</label>
+                <div class="col-sm-8">
+                	<div class="form-control-static color-slategray" th:text="${equContract.conSecond}"></div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label ">乙方联系人：</label>
+                <div class="col-sm-2">
+                	<div class="form-control-static color-slategray" th:text="${equContract.secondContacts}"></div>
+                </div>   
+                <label class="col-sm-3 control-label ">乙方联系方式：</label>
+                <div class="col-sm-3">
+                	<div class="form-control-static color-slategray" th:text="${equContract.secondPhone}"></div>
+                </div>
+            </div>
+            <h4 class="form-header h4">其他信息</h4>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备注 ：</label>
+                <div class="col-sm-8"> 
+                	<div class="form-control-static color-slategray" th:text="${equContract.remark}"></div>
+                </div>
+             </div>
+             <h4 class="form-header h4">附件</h4>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        $("#form-equcontract-detail").validate({
+            focusCleanup: true
+        });
+    </script>
+</body>
+</html>

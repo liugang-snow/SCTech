@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sctech.equipment.mapper.EquChannelMapper">
+    
+    <resultMap type="EquChannel" id="EquChannelResult">
+        <result property="channelId"    column="channel_id"    />
+        <result property="channelGuid"    column="channel_guid"    />
+        <result property="equId"    column="equ_id"    />
+        <result property="channelName"    column="channel_name"    />
+        <result property="channelCode"    column="channel_code"    />
+        <result property="channelDecs"    column="channel_decs"    />
+        <result property="channelType"    column="channel_type"    />
+        <result property="channelClass"    column="channel_class"    />
+        <result property="remark"    column="remark"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectEquChannelVo">
+        select channel_id, channel_guid, equ_id, channel_name, channel_code, channel_decs, channel_type, channel_class, remark, del_flag, create_by, create_time, update_by, update_time from equ_channel
+    </sql>
+
+    <select id="selectEquChannelList" parameterType="EquChannel" resultMap="EquChannelResult">
+        <include refid="selectEquChannelVo"/>
+        <where>
+        	<if test="equId != null  and equId != ''"> and equ_id = #{equId}</if>
+            <if test="channelName != null  and channelName != ''"> and channel_name like concat('%', #{channelName}, '%')</if>
+            <if test="channelCode != null  and channelCode != ''"> and channel_code like concat('%', #{channelCode}, '%')</if>
+            <if test="channelDecs != null  and channelDecs != ''"> and channel_decs like concat('%', #{channelDecs}, '%')</if>
+            <if test="channelType != null  and channelType != ''"> and channel_type = #{channelType}</if>
+            <if test="channelClass != null  and channelClass != ''"> and channel_class = #{channelClass}</if>
+            and del_flag = '0'
+            order by create_time desc
+        </where>
+    </select>
+    
+    <select id="selectEquChannelById" parameterType="Long" resultMap="EquChannelResult">
+        <include refid="selectEquChannelVo"/>
+        where channel_id = #{channelId}
+    </select>
+        
+    <insert id="insertEquChannel" parameterType="EquChannel" useGeneratedKeys="true" keyProperty="channelId">
+        insert into equ_channel
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="channelGuid != null  and channelGuid != ''">channel_guid,</if>
+            <if test="equId != null ">equ_id,</if>
+            <if test="channelName != null  and channelName != ''">channel_name,</if>
+            <if test="channelCode != null  and channelCode != ''">channel_code,</if>
+            <if test="channelDecs != null  and channelDecs != ''">channel_decs,</if>
+            <if test="channelType != null  and channelType != ''">channel_type,</if>
+            <if test="channelClass != null  and channelClass != ''">channel_class,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="channelGuid != null  and channelGuid != ''">#{channelGuid},</if>
+            <if test="equId != null ">#{equId},</if>
+            <if test="channelName != null  and channelName != ''">#{channelName},</if>
+            <if test="channelCode != null  and channelCode != ''">#{channelCode},</if>
+            <if test="channelDecs != null  and channelDecs != ''">#{channelDecs},</if>
+            <if test="channelType != null  and channelType != ''">#{channelType},</if>
+            <if test="channelClass != null  and channelClass != ''">#{channelClass},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEquChannel" parameterType="EquChannel">
+        update equ_channel
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="channelGuid != null  and channelGuid != ''">channel_guid = #{channelGuid},</if>
+            <if test="equId != null ">equ_id = #{equId},</if>
+            <if test="channelName != null  and channelName != ''">channel_name = #{channelName},</if>
+            <if test="channelCode != null  and channelCode != ''">channel_code = #{channelCode},</if>
+            <if test="channelDecs != null  and channelDecs != ''">channel_decs = #{channelDecs},</if>
+            <if test="channelType != null  and channelType != ''">channel_type = #{channelType},</if>
+            <if test="channelClass != null  and channelClass != ''">channel_class = #{channelClass},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where channel_id = #{channelId}
+    </update>
+
+    <delete id="deleteEquChannelById" parameterType="Long">
+        update equ_channel set del_flag = '2' where channel_id = #{channelId}
+    </delete>
+
+    <delete id="deleteEquChannelByIds" parameterType="String">
+        update equ_channel set del_flag = '2' channel_id area_id in
+        <foreach item="channelId" collection="array" open="(" separator="," close=")">
+            #{channelId}
+        </foreach>
+    </delete>
+    
+</mapper>

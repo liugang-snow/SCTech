@@ -1,0 +1,13 @@
+com\sctech\generator\domain\GenTable.class
+com\sctech\generator\service\IGenTableColumnService.class
+com\sctech\generator\config\GenConfig.class
+com\sctech\generator\service\impl\GenTableServiceImpl.class
+com\sctech\generator\controller\GenController.class
+com\sctech\generator\mapper\GenTableColumnMapper.class
+com\sctech\generator\service\impl\GenTableColumnServiceImpl.class
+com\sctech\generator\mapper\GenTableMapper.class
+com\sctech\generator\service\IGenTableService.class
+com\sctech\generator\util\VelocityUtils.class
+com\sctech\generator\domain\GenTableColumn.class
+com\sctech\generator\util\GenUtils.class
+com\sctech\generator\util\VelocityInitializer.class

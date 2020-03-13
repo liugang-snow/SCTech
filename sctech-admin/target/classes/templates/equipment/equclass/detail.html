@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('查看设备分类')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-equclass-detail" th:object="${equClass}">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">上级分类：</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                    	<div class="form-control-static color-slategray" th:text="${equClass.parentName}"></div>		                    
+                    </div>
+                </div>
+            </div>            
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">设备分类名称：</label>
+                <div class="col-sm-8">
+                	<div class="form-control-static color-slategray" th:text="${equClass.className}"></div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">设备分类编码：</label>
+                <div class="col-sm-8">
+                	<div class="form-control-static color-slategray" th:text="${equClass.classCode}"></div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">显示顺序：</label>
+                <div class="col-sm-8">
+                	<div class="form-control-static color-slategray" th:text="${equClass.orderNum}"></div>
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="col-sm-3 control-label">状态：</label>
+				<div class="col-sm-8">
+					<div class="form-control-static color-slategray" th:text="${equClass.status == '0' ? '启用' : '停用'}"></div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">备注：</label>
+				<div class="col-sm-8">
+					<div class="form-control-static color-slategray" th:text="${equClass.remark}"></div>
+				</div>
+			</div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        $("#form-equclass-detail").validate({
+            focusCleanup: true
+        });
+    </script>
+</body>
+</html>

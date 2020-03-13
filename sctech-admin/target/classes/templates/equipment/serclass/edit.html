@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改维修分类')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-serclass-edit" th:object="${serClass}">
+            <input name="sclassId" th:field="*{sclassId}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">上级分类：</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input id="treeId" name="parentId" type="hidden" th:field="*{parentId}" />
+                        <input class="form-control" type="text" onclick="selectSerclassTree()" id="treeName" readonly th:field="*{parentName}" required>
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">分类名称：</label>
+                <div class="col-sm-8">
+                    <input name="sclassName" th:field="*{sclassName}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">分类编码：</label>
+                <div class="col-sm-8">
+                    <input name="sclassCode" th:field="*{sclassCode}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">负责班组：</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input id="treetId" name="teamId" type="hidden" th:field="*{teamId}"/>
+                        <input class="form-control" type="text" onclick="selectSerteamTree()" id="treetName" readonly th:field="*{teamName}" required>
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">完成时间(小时)：</label>
+                <div class="col-sm-8">
+                    <input name="sclassTime" th:field="*{sclassTime}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">紧急程度：</label>
+                <div class="col-sm-8">
+                    <select name="sclassEmergency" class="form-control m-b" th:with="type=${@dict.getType('ser_emergency_type')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{sclassEmergency}"></option>
+                    </select>
+                </div>
+            </div>          
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">显示顺序：</label>
+                <div class="col-sm-8">
+                    <input name="orderNum" th:field="*{orderNum}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="col-sm-3 control-label">状态：</label>
+				<div class="col-sm-8">
+			        <label class="toggle-switch switch-solid">
+                        <input type="checkbox" id="status" th:checked="${serClass.status == '0' ? true : false}">
+                        <span></span>
+                    </label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">备注：</label>
+				<div class="col-sm-8">
+					<textarea name="remark" maxlength="500" class="form-control" rows="3" th:field="*{remark}"></textarea>
+				</div>
+			</div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "equipment/serclass";
+        var prefixt = ctx + "equipment/serteam";
+        
+        $("#form-serclass-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+            	var data = $('#form-serclass-edit').serializeArray();
+            	var status = $("input[id='status']").is(':checked') == true ? 0 : 1;
+            	data.push({"name": "status", "value": status});
+                $.operate.save(prefix + "/edit", data);
+            }
+        }
+
+        /*维修分类-编辑-选择父部门树*/
+        function selectSerclassTree() {
+            var options = {
+                title: '维修分类选择',
+                width: "380",
+                url: prefix + "/selectSerclassTree/" + $("#treeId").val(),
+                callBack: doSubmit
+            };
+            $.modal.openOptions(options);
+        }
+        function doSubmit(index, layero){
+            var body = layer.getChildFrame('body', index);
+               $("#treeId").val(body.find('#treeId').val());
+               $("#treeName").val(body.find('#treeName').val());
+               layer.close(index);
+        }
+        
+        /*维修人员-编辑-选择维修班组树*/
+        function selectSerteamTree() {
+            var options = {
+                title: '维修班组选择',
+                width: "380",
+                url: prefixt + "/selectSerteamTree/" + $("#treeId").val(),
+                callBack: doSubmit
+            };
+            $.modal.openOptions(options);
+        }
+        function doSubmit(index, layero){
+            var body = layer.getChildFrame('body', index);
+               $("#treetId").val(body.find('#treeId').val());
+               $("#treetName").val(body.find('#treeName').val());
+               layer.close(index);
+        }
+    </script>
+</body>
+</html>

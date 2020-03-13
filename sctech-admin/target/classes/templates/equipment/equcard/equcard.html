@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('设备档案列表')" />
+	<th:block th:include="include :: layout-latest-css" />
+	<th:block th:include="include :: ztree-css" />
+</head>
+<body class="gray-bg">
+    <div class="ui-layout-west">
+		<div class="box box-main">
+			<div class="box-header">
+				<div class="box-title">
+					<i class="fa icon-grid"></i> 设备分类
+				</div>
+			</div>
+			<div class="ui-layout-content">
+				<div id="tree" class="ztree"></div>
+			</div>
+		</div>
+	</div>
+    
+    <div class="ui-layout-center">
+	    <div class="container-div">
+	        <div class="row">
+	            <div class="col-sm-12 search-collapse">
+	                <form id="formId">
+	                	<input type="hidden" id="classId" name="classId">
+		                <input type="hidden" id="parentId" name="parentId">
+	                    <div class="select-list">
+	                        <ul>
+	                            <li>
+	                                <p>流水号：</p>
+	                                <input type="text" name="equSerial"/>
+	                            </li>
+	                            <li>
+	                                <p>设备名称：</p>
+	                                <input type="text" name="equName"/>
+	                            </li>
+	                            <li>
+	                                <p>使用状态：</p>
+	                                <select name="equStatus" th:with="type=${@dict.getType('equ_status_type')}">
+	                                    <option value="">所有</option>
+	                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+	                                </select>
+	                            </li>
+	                            <li class="select-time">
+	                                <p>创建时间：</p>
+	                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+	                                <span>-</span>
+	                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+	                            </li>
+	                            <li>
+	                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+	                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+	                            </li>
+	                        </ul>
+	                    </div>
+	                </form>
+	            </div>
+	
+	            <div class="btn-group-sm" id="toolbar" role="group">
+	                <a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="equipment:equcard:add">
+	                    <i class="fa fa-plus"></i> 添加
+	                </a>
+	                <a class="btn btn-primary single disabled" onclick="$.operate.editTab()" shiro:hasPermission="equipment:equcard:edit">
+	                    <i class="fa fa-edit"></i> 修改
+	                </a>
+	                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="equipment:equcard:remove">
+	                    <i class="fa fa-remove"></i> 删除
+	                </a>
+	                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="equipment:equcard:export">
+	                    <i class="fa fa-download"></i> 导出
+	                 </a>
+	            </div>
+	            <div class="col-sm-12 select-table table-striped">
+	                <table id="bootstrap-table"></table>
+	            </div>
+	        </div>
+	    </div>
+    </div>
+    
+    <th:block th:include="include :: footer" />
+	<th:block th:include="include :: layout-latest-js" />
+	<th:block th:include="include :: ztree-js" />
+    
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('equipment:equcard:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('equipment:equcard:remove')}]];
+        var channelFlag = [[${@permission.hasPermi('equipment:equcard:channel')}]];
+        var equStatusDatas = [[${@dict.getType('equ_status_type')}]];
+        var prefix = ctx + "equipment/equcard";
+		var prefixc = ctx + "equipment/equchannel";
+		      
+        $(function() {
+		    var panehHidden = false;
+		    if ($(this).width() < 769) {
+		        panehHidden = true;
+		    }
+		    $('body').layout({ initClosed: panehHidden, west__size: 185 });
+		    queryClassTree();
+		    queryCardList();
+		    
+		});
+        
+        function queryClassTree(){
+        	var url = ctx + "equipment/equclass/treeData";
+			var options = {
+		        url: url,
+		        expandLevel: 2,
+		        onClick : zOnClick
+		    };
+			$.tree.init(options);
+			
+			function zOnClick(event, treeId, treeNode) {
+				$("#classId").val(treeNode.id);
+				$("#parentId").val(treeNode.pId);
+				$.table.search();
+			}
+        }
+        
+        function queryCardList() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                detailUrl: prefix + "/detail/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "设备档案",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'equSerial', 
+                    title : '流水号'
+                },
+                {
+                    field : 'equName', 
+                    title : '设备名称'
+                },
+                {
+                    field : 'equCount', 
+                    title : '数量'
+                },
+                {
+                    field : 'equSprice', 
+                    title : '单价(元)'
+                },
+                {
+                    field : 'equPrice', 
+                    title : '总价(元)'
+                },
+                {
+                    field : 'equStatus', 
+                    title : '设备使用状态 ',
+                    formatter: function(value, row, index) {
+                       return $.table.selectDictLabel(equStatusDatas, value);
+                    }
+                },
+                {
+                    field : 'createTime', 
+                    title : '创建时间'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.equId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.equId + '\')"><i class="fa fa-remove"></i>删除</a> ');
+                        actions.push('<a class="btn btn-primary btn-xs ' + channelFlag + '" href="javascript:void(0)" onclick="channels(\'' + row.equName +'\',\'' + row.equId + '\')"><i class="fa fa-briefcase"></i>位号管理</a> ');
+                        actions.push('<a class="btn btn-warning btn-xs" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.equId + '\')"><i class="fa fa-search"></i>查看</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        }
+        
+        /* 位号管理 */
+        function channels(equname, equid) {
+		    var url = prefixc + '/channels/' + equid;
+		    $.modal.openTab("位号管理", url);
+		}
+    </script>
+</body>
+</html>

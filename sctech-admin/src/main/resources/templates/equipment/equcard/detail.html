@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('查看设备档案')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-equcard-detail" th:object="${equCard}"> 
+       		<h4 class="form-header h4">设备基本信息</h4> 
+       		<div class="row">
+	            <div class="col-sm-12">
+		            <div class="form-group">    
+		                <label class="col-sm-2 control-label ">设备流水号：</label>
+		                <div class="col-sm-10">
+		                    <div class="form-control-static color-slategray" th:text="${equCard.equSerial}"></div>
+		                </div>
+		            </div>
+		        </div>
+		    </div> 
+	        <div class="row">
+	            <div class="col-sm-12">
+		            <div class="form-group">    
+		                <label class="col-sm-2 control-label ">设备名称：</label>
+		                <div class="col-sm-10">
+		                    <div class="form-control-static color-slategray" th:text="${equCard.equName}"></div>
+		                </div>
+		            </div>
+		        </div>
+		    </div>		     
+		    <div class="row">    
+		        <div class="col-sm-6">
+		            <div class="form-group">    
+		                <label class="col-sm-4 control-label ">设备分类 ：</label>
+		                <div class="col-sm-8">
+		                	<div class="form-control-static color-slategray" th:text="${equCard.className}"></div>
+		                </div>
+		            </div>
+		        </div> 
+		    </div>		     
+		    <div class="row">
+		        <div class="col-sm-6">
+		            <div class="form-group">    
+		                <label class="col-sm-4 control-label ">数量：</label>
+		                <div class="col-sm-8">
+		                	<div class="form-control-static color-slategray" th:text="${equCard.equCount}"></div>
+		                </div>
+		            </div>
+		        </div>   
+		        <div class="col-sm-6">
+		            <div class="form-group">    
+		                <label class="col-sm-4 control-label ">单价(元)：</label>
+		                <div class="col-sm-8">
+		                	<div class="form-control-static color-slategray" th:text="${equCard.equSprice}"></div>
+		                </div>
+		            </div>
+		        </div>       
+		    </div>  			    
+		    <div class="row">
+		    	<div class="col-sm-12">
+		            <div class="form-group">    
+		                <label class="col-sm-2 control-label">所属合同：</label>
+		                <div class="col-sm-10">
+		                	<div class="form-control-static color-slategray" th:text="${equCard.contractName}"></div>
+		                </div>
+		            </div>
+		        </div>    	  
+		    </div>	      
+		 	<div class="row">
+		        <div class="col-sm-12">
+		            <div class="form-group">    
+		                <label class="col-sm-2 control-label">设备供应商：</label>
+		                <div class="col-sm-10">
+		                	<div class="form-control-static color-slategray" th:text="${equCard.supplierName}"></div>
+		                </div>
+		            </div>
+		        </div> 
+		    </div>	      
+		 	<div class="row">       
+		        <div class="col-sm-6">
+		            <div class="form-group">    
+		                <label class="col-sm-4 control-label">品牌：</label>
+		                <div class="col-sm-8">
+		                	<div class="form-control-static color-slategray" th:text="${equCard.equBrand}"></div>
+		                </div>
+		            </div>
+		        </div> 
+		    </div>  		      
+		    <div class="row">
+		        <div class="col-sm-12">
+		            <div class="form-group">
+		                <label class="col-xs-2 control-label">规格型号：</label>
+		                <div class="col-xs-10">
+		                	<div class="form-control-static color-slategray" th:text="${equCard.equParam}"></div>
+		                </div>
+		            </div>
+		        </div>  
+		    </div>    		    
+		    <div class="row">
+		        <div class="col-sm-6">
+		            <div class="form-group">    
+		                <label class="col-sm-4 control-label">所属部门：</label>
+		                <div class="col-sm-8">
+		                	<div class="form-control-static color-slategray" th:text="${equCard.deptName}"></div>
+		                </div>
+		            </div>
+		        </div>
+		        <div class="col-sm-6">
+		            <div class="form-group">    
+		                <label class="col-sm-4 control-label">设备管理员：</label>
+		                <div class="col-sm-8">
+		                	<div class="form-control-static color-slategray" th:text="${equCard.equAdmin}"></div>
+		                </div>
+		            </div>
+		        </div>
+		    </div> 	       
+		    <div class="row">
+		        <div class="col-sm-6">
+		            <div class="form-group">    
+		                <label class="col-sm-4 control-label">设备采购时间：</label>
+		                <div class="col-sm-8">
+		                	<div class="form-control-static color-slategray" th:text="${#dates.format(equCard.equTime, 'yyyy-MM-dd')}"></div>
+		                </div>
+		            </div>
+		         </div>   
+		        <div class="col-sm-6">
+		            <div class="form-group">    
+		                <label class="col-sm-4 control-label">设备使用年限：</label>
+		                <div class="col-sm-8">
+		                	<div class="form-control-static color-slategray" th:text="${equCard.equYear}"></div>
+		                </div>
+		            </div>
+		         </div>    
+		    </div>  		      
+		    <div class="row">
+		        <div class="col-sm-12">
+		            <div class="form-group">
+		                <label class="col-xs-2 control-label">所在区域：</label>
+		                <div class="col-xs-10">
+		                	<div class="form-control-static color-slategray" th:text="${equCard.areaName}"></div>
+		                </div>
+		            </div>
+		        </div> 
+		    </div>     
+		    <div class="row">
+		        <div class="col-sm-12">
+		            <div class="form-group">    
+		                <label class="col-xs-2 control-label">特种属性：</label>
+		                <div class="col-xs-10">			                			                	
+		                	<div class="form-control-static color-slategray" th:text="${@dict.getLabel('equ_attribute_type', equCard.equAttribute)}"></div>								                
+		                </div>
+		            </div>
+		        </div>
+		    </div> 
+		    <div class="row">
+		    	<div class="col-sm-12">
+		            <div class="form-group">    
+		                <label class="col-xs-2 control-label">设备使用状态 ：</label>
+		                <div class="col-xs-10">
+		                	<div class="form-control-static color-slategray" th:text="${@dict.getLabel('equ_status_type', equCard.equStatus)}"></div>		                    
+		                </div>
+		            </div>
+		         </div>
+		    </div>
+        	<h4 class="form-header h4">其他信息</h4>
+        	<div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">备注：</label>
+                        <div class="col-xs-10">
+                        	<div class="form-control-static color-slategray" th:text="${equCard.remark}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        	<h4 class="form-header h4">附件材料</h4>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        $("#form-equcard-detail").validate({
+            focusCleanup: true
+        });
+    </script>
+</body>
+</html>

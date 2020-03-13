@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sctech.equipment.mapper.EquCardMapper">
+    
+    <resultMap type="EquCard" id="EquCardResult">
+        <result property="equId"    column="equ_id"    />
+        <result property="equGuid"    column="equ_guid"    />
+        <result property="equSerial"    column="equ_serial"    />
+        <result property="equCode"    column="equ_code"    />
+        <result property="equName"    column="equ_name"    />
+        <result property="classId"    column="class_id"    />
+        <result property="equCount"    column="equ_count"    />
+        <result property="equSprice"    column="equ_sprice"    />
+        <result property="equPrice"    column="equ_price"    />
+        <result property="contractId"    column="contract_id"    />
+        <result property="supplierId"    column="supplier_id"    />
+        <result property="equBrand"    column="equ_brand"    />
+        <result property="equParam"    column="equ_param"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="equAdmin"    column="equ_admin"    />
+        <result property="equTime"    column="equ_time"    />
+        <result property="equYear"    column="equ_year"    />
+        <result property="equStatus"    column="equ_status"    />
+        <result property="areaId"    column="area_id"    />
+        <result property="equAttribute"    column="equ_attribute"    />
+        <result property="remark"    column="remark"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectEquCardVo">
+        select e.*, 
+        c.fullname as className, 
+        h.con_name as contractName, 
+        s.sup_name as supplierName, 
+        d.dept_name as deptName, 
+        a.fullname as areaName, 
+        sc.scr_id as scrId
+        from equ_card e
+        left join equ_class c on c.class_id = e.class_id
+        left join equ_contract h on h.con_id = e.contract_id
+        left join equ_supplier s on s.sup_id = e.supplier_id
+        left join sys_dept d on d.dept_id = e.dept_id
+        left join equ_area a on a.area_id = e.area_id
+        left join equ_scrap sc on e.equ_id = sc.equ_id and sc.del_flag = '0'
+    </sql>
+
+    <select id="selectEquCardList" parameterType="EquCard" resultMap="EquCardResult">
+        <include refid="selectEquCardVo"/>
+        <where>  
+            <if test="equSerial != null  and equSerial != ''"> 
+            	and e.equ_serial like concat('%', #{equSerial}, '%')
+           	</if>
+            <if test="equName != null  and equName != ''"> 
+            	and e.equ_name like concat('%', #{equName}, '%')
+            </if>
+            <if test="params.beginPrice != null and params.beginPrice != ''"><!-- 总价检索 -->
+				and e.equ_price &gt;= #{params.beginPrice}
+			</if>
+			<if test="params.endPrice != null and params.endPrice != ''"><!-- 总价检索 -->
+				and e.equ_price &lt;= #{params.endPrice}
+			</if>
+			<if test="deptName != null  and deptName != ''"> 
+            	and d.dept_name like concat('%', #{deptName}, '%')
+            </if>
+            <if test="supplierName != null  and supplierName != ''"> 
+            	and s.sup_name like concat('%', #{supplierName}, '%')
+            </if>
+            <if test="contractName != null  and contractName != ''"> 
+            	and h.con_name like concat('%', #{contractName}, '%')
+            </if>
+            <if test="equStatus != null  and equStatus != ''"> 
+            	and e.equ_status = #{equStatus}
+            </if>          
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+				and date_format(e.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+			</if>
+			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+				and date_format(e.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+			</if>
+			<if test="createBy != null  and createBy != ''"> 
+            	and e.create_by like concat('%', #{createBy}, '%')
+            </if>
+            <if test="classId != null  and classId != ''"> 
+            	and (e.class_id = #{classId} or e.class_id in ( select s.class_id from equ_class s where find_in_set (#{classId},ancestors) ))
+            </if>
+            and e.del_flag = '0'
+            order by e.create_time desc
+        </where>
+    </select>
+    
+    <select id="selectEquCardById" parameterType="Long" resultMap="EquCardResult">
+        <include refid="selectEquCardVo"/>
+        where e.equ_id = #{equId}
+    </select>
+        
+    <insert id="insertEquCard" parameterType="EquCard" useGeneratedKeys="true" keyProperty="equId">
+        insert into equ_card
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="equGuid != null  and equGuid != ''">equ_guid,</if>
+            <if test="equSerial != null  and equSerial != ''">equ_serial,</if>
+            <if test="equCode != null  and equCode != ''">equ_code,</if>
+            <if test="equName != null  and equName != ''">equ_name,</if>
+            <if test="classId != null ">class_id,</if>
+            <if test="equCount != null ">equ_count,</if>
+            <if test="equSprice != null ">equ_sprice,</if>
+            <if test="equPrice != null ">equ_price,</if>
+            <if test="contractId != null ">contract_id,</if>
+            <if test="supplierId != null ">supplier_id,</if>
+            <if test="equBrand != null  and equBrand != ''">equ_brand,</if>
+            <if test="equParam != null  and equParam != ''">equ_param,</if>
+            <if test="deptId != null ">dept_id,</if>
+            <if test="equAdmin != null  and equAdmin != ''">equ_admin,</if>
+            <if test="equTime != null ">equ_time,</if>
+            <if test="equYear != null ">equ_year,</if>
+            <if test="equStatus != null  and equStatus != ''">equ_status,</if>
+            <if test="areaId != null  and areaId != ''">area_id,</if>
+            <if test="equAttribute != null  and equAttribute != ''">equ_attribute,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="equGuid != null  and equGuid != ''">#{equGuid},</if>
+            <if test="equSerial != null  and equSerial != ''">#{equSerial},</if>
+            <if test="equCode != null  and equCode != ''">#{equCode},</if>
+            <if test="equName != null  and equName != ''">#{equName},</if>
+            <if test="classId != null ">#{classId},</if>
+            <if test="equCount != null ">#{equCount},</if>
+            <if test="equSprice != null ">#{equSprice},</if>
+            <if test="equPrice != null ">#{equPrice},</if>
+            <if test="contractId != null ">#{contractId},</if>
+            <if test="supplierId != null ">#{supplierId},</if>
+            <if test="equBrand != null  and equBrand != ''">#{equBrand},</if>
+            <if test="equParam != null  and equParam != ''">#{equParam},</if>
+            <if test="deptId != null ">#{deptId},</if>
+            <if test="equAdmin != null  and equAdmin != ''">#{equAdmin},</if>
+            <if test="equTime != null ">#{equTime},</if>
+            <if test="equYear != null ">#{equYear},</if>
+            <if test="equStatus != null  and equStatus != ''">#{equStatus},</if>
+            <if test="areaId != null  and areaId != ''">#{areaId},</if>
+            <if test="equAttribute != null  and equAttribute != ''">#{equAttribute},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateEquCard" parameterType="EquCard">
+        update equ_card
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="equGuid != null  and equGuid != ''">equ_guid = #{equGuid},</if>
+            <if test="equSerial != null  and equSerial != ''">equ_serial = #{equSerial},</if>
+            <if test="equCode != null  and equCode != ''">equ_code = #{equCode},</if>
+            <if test="equName != null  and equName != ''">equ_name = #{equName},</if>
+            <if test="classId != null ">class_id = #{classId},</if>
+            <if test="equCount != null ">equ_count = #{equCount},</if>
+            <if test="equSprice != null ">equ_sprice = #{equSprice},</if>
+            <if test="equPrice != null ">equ_price = #{equPrice},</if>
+            <if test="contractId != null ">contract_id = #{contractId},</if>
+            <if test="supplierId != null ">supplier_id = #{supplierId},</if>
+            <if test="equBrand != null  and equBrand != ''">equ_brand = #{equBrand},</if>
+            <if test="equParam != null  and equParam != ''">equ_param = #{equParam},</if>
+            <if test="deptId != null ">dept_id = #{deptId},</if>
+            <if test="equAdmin != null  and equAdmin != ''">equ_admin = #{equAdmin},</if>
+            <if test="equTime != null ">equ_time = #{equTime},</if>
+            <if test="equYear != null ">equ_year = #{equYear},</if>
+            <if test="equStatus != null  and equStatus != ''">equ_status = #{equStatus},</if>
+            <if test="areaId != null  and areaId != ''">area_id = #{areaId},</if>
+            <if test="equAttribute != null  and equAttribute != ''">equ_attribute = #{equAttribute},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where equ_id = #{equId}
+    </update>
+
+    <delete id="deleteEquCardById" parameterType="Long">
+        update equ_card set del_flag = '2' where equ_id = #{equId}
+    </delete>
+
+    <delete id="deleteEquCardByIds" parameterType="String">
+        update equ_card set del_flag = '2' where equ_id in 
+        <foreach item="equId" collection="array" open="(" separator="," close=")">
+            #{equId}
+        </foreach>
+    </delete>
+    
+    <update id="getSerialNumCard" parameterMap="initMap" statementType="CALLABLE">
+        CALL GetSerialNumCard(?)
+    </update>
+    <parameterMap type="java.util.Map" id="initMap">
+        <parameter property="result" mode="OUT" jdbcType="VARCHAR"/>
+    </parameterMap>
+       
+    <select id="selectSupList" parameterType="EquCard" resultMap="EquCardResult">
+        <include refid="selectEquCardVo"/>
+        <where>  
+            <if test="equSerial != null  and equSerial != ''"> 
+            	and e.equ_serial like concat('%', #{equSerial}, '%')
+           	</if>
+            <if test="equName != null  and equName != ''"> 
+            	and e.equ_name like concat('%', #{equName}, '%')
+            </if>
+            and e.del_flag = '0' and e.supplier_id = #{supplierId}
+        </where>
+    </select>
+    
+    <select id="selectConList" parameterType="EquCard" resultMap="EquCardResult">
+        <include refid="selectEquCardVo"/>
+        <where>  
+            <if test="equSerial != null  and equSerial != ''"> 
+            	and e.equ_serial like concat('%', #{equSerial}, '%')
+           	</if>
+            <if test="equName != null  and equName != ''"> 
+            	and e.equ_name like concat('%', #{equName}, '%')
+            </if>
+            and e.del_flag = '0' and e.contract_id = #{contractId}
+        </where>
+    </select>
+    
+    <update id="deleteSup" parameterType="Long">
+        update equ_card set supplier_id = null where equ_id = #{equId}
+    </update>
+
+    <update id="deleteSups" parameterType="String">
+        update equ_card set supplier_id = null where equ_id in 
+        <foreach item="equId" collection="array" open="(" separator="," close=")">
+            #{equId}
+        </foreach>
+    </update>
+    
+    <update id="deleteCon" parameterType="Long">
+        update equ_card set contract_id = null where equ_id = #{equId}
+    </update>
+
+    <update id="deleteCons" parameterType="String">
+        update equ_card set contract_id = null where equ_id in 
+        <foreach item="equId" collection="array" open="(" separator="," close=")">
+            #{equId}
+        </foreach>
+    </update>
+    
+    <select id="selectSupListNo" parameterType="EquCard" resultMap="EquCardResult">
+        <include refid="selectEquCardVo"/>
+        <where>  
+            <if test="equSerial != null  and equSerial != ''"> 
+            	and e.equ_serial like concat('%', #{equSerial}, '%')
+           	</if>
+            <if test="equName != null  and equName != ''"> 
+            	and e.equ_name like concat('%', #{equName}, '%')
+            </if>
+            and e.del_flag = '0' 
+            and (e.supplier_id != #{supplierId} or e.supplier_id is null)
+        </where>
+    </select>
+    
+    <select id="selectConListNo" parameterType="EquCard" resultMap="EquCardResult">
+        <include refid="selectEquCardVo"/>
+        <where>  
+            <if test="equSerial != null  and equSerial != ''"> 
+            	and e.equ_serial like concat('%', #{equSerial}, '%')
+           	</if>
+            <if test="equName != null  and equName != ''"> 
+            	and e.equ_name like concat('%', #{equName}, '%')
+            </if>
+            and e.del_flag = '0' 
+            and (e.contract_id != #{contractId} or e.contract_id is null)
+        </where>
+    </select>
+    
+    <update id="selectCardsSup" >
+        update equ_card set supplier_id = #{param2} where equ_id in 
+        <foreach item="equId" collection="param1" open="(" separator="," close=")">
+            #{equId}
+        </foreach>
+    </update>
+    
+    <update id="selectCardsCon" >
+        update equ_card set contract_id = #{param2} where equ_id in 
+        <foreach item="equId" collection="param1" open="(" separator="," close=")">
+            #{equId}
+        </foreach>
+    </update>
+    
+    <update id="setStatus" >
+        update equ_card set equ_status = #{param2} where equ_id = #{param1}
+    </update>
+    
+    <update id="setStatuses" >
+        update equ_card set equ_status = #{param2} where equ_id in 
+        <foreach item="equId" collection="param1" open="(" separator="," close=")">
+            #{equId}
+        </foreach>
+    </update>
+          
+</mapper>
