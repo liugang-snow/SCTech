@@ -98,6 +98,21 @@ public class EquAreaServiceImpl implements IEquAreaService
     }
 
     /**
+     * 更新设备所在区域状态
+     * 
+     * @param equArea 设备所在区域
+     * @return 结果
+     */
+    @Override
+    public int updateStatus(EquArea equArea)
+    {
+    	if (equArea.getStatus().equals("1"))
+    		return equAreaMapper.updateStatusD(equArea);
+    	else
+    		return equAreaMapper.updateStatusE(equArea);
+    }
+    
+    /**
      * 查询设备所在区域树列表
      * 
      * @return 所有设备所在区域信息
@@ -109,26 +124,18 @@ public class EquAreaServiceImpl implements IEquAreaService
         List<Ztree> ztrees = new ArrayList<Ztree>();
         for (EquArea equArea : equAreaList)
         {
-            Ztree ztree = new Ztree();
-            ztree.setId(equArea.getAreaId());
-            ztree.setpId(equArea.getParentId());
-            ztree.setName(equArea.getAreaName());
-            ztree.setNames(equArea.getFullname());
-            ztree.setTitle(equArea.getAreaName());
-            ztrees.add(ztree);
+        	if(equArea.getStatus().equals("0"))
+        	{
+	            Ztree ztree = new Ztree();
+	            ztree.setId(equArea.getAreaId());
+	            ztree.setpId(equArea.getParentId());
+	            ztree.setName(equArea.getAreaName());
+	            ztree.setNames(equArea.getFullname());
+	            ztree.setTitle(equArea.getAreaName());
+	            ztrees.add(ztree);
+        	}
         }
         return ztrees;
     }
     
-    /**
-     * 设备所在区域状态修改
-     * 
-     * @param equArea 设备所在区域信息
-     * @return 结果
-     */
-    @Override
-    public int changeStatus(EquArea equArea)
-    {
-        return equAreaMapper.updateEquArea(equArea);
-    }
 }

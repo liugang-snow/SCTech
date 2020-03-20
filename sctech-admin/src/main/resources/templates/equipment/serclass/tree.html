@@ -12,6 +12,9 @@
     <input id="treeId"   name="treeId"    type="hidden" th:value="${serClass?.sclassId}"/>
     <input id="treeName" name="treeName"  type="hidden" th:value="${serClass?.sclassName}"/>
     <input id="treeNames" name="treeNames"  type="hidden" th:value="${serClass?.fullname}"/>
+    <input id="emergency" name="emergency"  type="hidden" th:value="${serClass?.sclassEmergency}"/>
+    <input id="teamId" name="teamId"  type="hidden" th:value="${serClass?.teamId}"/>
+    <input id="teamName" name="teamName"  type="hidden" th:value="${serClass?.teamName}"/>
     <div class="wrapper"><div class="treeShowHideButton" onclick="$.tree.toggleSearch();">
         <label id="btnShow" title="显示搜索" style="display:none;">︾</label>
         <label id="btnHide" title="隐藏搜索">︽</label>
@@ -43,9 +46,16 @@
             var treeId = treeNode.id;
             var treeName = treeNode.name;
             var treeNames = treeNode.names;
+            var emergency = treeNode.emergency;
+            var teamId = treeNode.teamId;
+            var teamName = treeNode.teamName;
+            
             $("#treeId").val(treeId);
             $("#treeName").val(treeName);
             $("#treeNames").val(treeNames);
+            $("#emergency").val(emergency);
+            $("#teamId").val(teamId);
+            $("#teamName").val(teamName);
         }
     </script>
 </body>

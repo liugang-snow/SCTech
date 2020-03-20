@@ -119,7 +119,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="checkClassNameUnique" resultMap="EquClassResult">
 	    <include refid="selectEquClassVo"/>
-		where class_name=#{className} and parent_id = #{parentId} and del_flag = '0'
+		where class_name = #{className} and parent_id = #{parentId} and del_flag = '0'
 	</select>
 	
+	<update id="updateStatusD" parameterType="EquClass">
+        update equ_class set status = #{status} 
+        where (class_id = #{classId} 
+        or ancestors like concat(#{ancestors}, ',', #{classId}, '%')) 
+        and del_flag = '0'	
+    </update>
+	
+	<update id="updateStatusE" parameterType="EquClass">
+        update equ_class set status = #{status} 
+        where (class_id = #{classId} 
+        or ancestors like concat(#{ancestors}, ',', #{classId}, '%')
+	   	or find_in_set (class_id, #{ancestors})) 
+	   	and del_flag = '0'
+    </update>
+    
 </mapper>

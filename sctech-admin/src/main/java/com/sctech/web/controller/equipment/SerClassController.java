@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sctech.common.annotation.Log;
 import com.sctech.common.enums.BusinessType;
 import com.sctech.equipment.domain.SerClass;
+import com.sctech.equipment.domain.ZtreeSClass;
 import com.sctech.equipment.service.ISerClassService;
 import com.sctech.framework.util.ShiroUtils;
 import com.sctech.common.core.controller.BaseController;
 import com.sctech.common.core.domain.AjaxResult;
 import com.sctech.common.utils.poi.ExcelUtil;
 import com.sctech.common.utils.StringUtils;
-import com.sctech.common.core.domain.Ztree;
 
 /**
  * 维修分类Controller
@@ -165,9 +165,9 @@ public class SerClassController extends BaseController
      */
     @GetMapping("/treeData")
     @ResponseBody
-    public List<Ztree> treeData()
+    public List<ZtreeSClass> treeData()
     {
-        List<Ztree> ztrees = serClassService.selectSerClassTree();
+        List<ZtreeSClass> ztrees = serClassService.selectSerClassTree();
         return ztrees;
     }
     
@@ -176,10 +176,10 @@ public class SerClassController extends BaseController
      */
     @Log(title = "维修分类管理", businessType = BusinessType.UPDATE)
     @RequiresPermissions("equipment:serclass:edit")
-    @PostMapping("/changeStatus")
+    @PostMapping("/updateStatus")
     @ResponseBody
-    public AjaxResult changeStatus(SerClass serClass)
+    public AjaxResult updateStatus(SerClass serClass)
     {
-        return toAjax(serClassService.changeStatus(serClass));
+        return toAjax(serClassService.updateStatus(serClass));
     }
 }

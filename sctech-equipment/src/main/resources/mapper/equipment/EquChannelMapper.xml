@@ -103,7 +103,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteEquChannelByIds" parameterType="String">
-        update equ_channel set del_flag = '2' channel_id area_id in
+        update equ_channel set del_flag = '2' where channel_id in
         <foreach item="channelId" collection="array" open="(" separator="," close=")">
             #{channelId}
         </foreach>

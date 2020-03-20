@@ -1626,6 +1626,370 @@
             }
           ],
           "chnname": "维修分类表"
+        },
+        {
+          "title": "ser_card",
+          "fields": [
+            {
+              "name": "scard_id",
+              "type": "BigInt",
+              "remark": "主键",
+              "chnname": "ID",
+              "pk": true,
+              "notNull": true,
+              "autoIncrement": true
+            },
+            {
+              "name": "scard_guid",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "Guid",
+              "notNull": true,
+              "defaultValue": ""
+            },
+            {
+              "name": "scard_code",
+              "type": "Name",
+              "remark": "",
+              "chnname": "维修单号"
+            },
+            {
+              "name": "sclass_id",
+              "type": "BigInt",
+              "remark": "维修分类表主键",
+              "chnname": "维修分类"
+            },
+            {
+              "name": "sclass_emergency",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "紧急程度"
+            },
+            {
+              "name": "scard_origin",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "维修来源"
+            },
+            {
+              "name": "repair_date",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "报修时间"
+            },
+            {
+              "name": "repair_contacts",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "联系人"
+            },
+            {
+              "name": "repair_phone",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "联系电话"
+            },
+            {
+              "name": "dept_id",
+              "type": "BigInt",
+              "remark": "部门表主键",
+              "chnname": "报修部门"
+            },
+            {
+              "name": "area_id",
+              "type": "BigInt",
+              "remark": "设备所在区域表主键",
+              "chnname": "报修地址"
+            },
+            {
+              "name": "repair_description",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "维修详情"
+            },
+            {
+              "name": "team_id",
+              "type": "BigInt",
+              "remark": "维修班组表主键",
+              "chnname": "指派班组"
+            },
+            {
+              "name": "staff_ids",
+              "type": "LongKey",
+              "remark": "维修人员集合",
+              "chnname": "维修人员"
+            },
+            {
+              "name": "finish_date",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "维修完成时间"
+            },
+            {
+              "name": "finish_description",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "维修结果"
+            },
+            {
+              "name": "remark",
+              "type": "Intro",
+              "remark": "",
+              "chnname": "备注"
+            },
+            {
+              "name": "ser_evaluation",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "服务态度"
+            },
+            {
+              "name": "rep_evaluation",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "维修质量"
+            },
+            {
+              "name": "ser_opinion",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "意见建议"
+            },
+            {
+              "name": "del_flag",
+              "type": "Char",
+              "remark": "（0代表存在 2代表删除）",
+              "chnname": "删除状态",
+              "notNull": false,
+              "defaultValue": "0"
+            },
+            {
+              "name": "create_by",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人",
+              "notNull": false
+            },
+            {
+              "name": "create_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间",
+              "notNull": false
+            },
+            {
+              "name": "update_by",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人",
+              "notNull": false
+            },
+            {
+              "name": "update_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间",
+              "notNull": false
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "维修工单表",
+          "remark": "维修工单表"
+        },
+        {
+          "title": "ser_expense",
+          "fields": [
+            {
+              "name": "expense_id",
+              "type": "BigInt",
+              "remark": "主键",
+              "chnname": "ID",
+              "pk": true,
+              "notNull": true,
+              "autoIncrement": true
+            },
+            {
+              "name": "expense_guid",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "Guid",
+              "notNull": true,
+              "defaultValue": ""
+            },
+            {
+              "name": "scard_id",
+              "type": "BigInt",
+              "remark": "维修工单表主键",
+              "chnname": "维修单ID"
+            },
+            {
+              "name": "expense_desc",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "项目描述"
+            },
+            {
+              "name": "expense_units",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "计价单位"
+            },
+            {
+              "name": "expense_quan",
+              "type": "Money",
+              "remark": "",
+              "chnname": "数量"
+            },
+            {
+              "name": "expense_price",
+              "type": "Money",
+              "remark": "",
+              "chnname": "单价"
+            },
+            {
+              "name": "expense_sum",
+              "type": "Money",
+              "remark": "",
+              "chnname": "金额"
+            },
+            {
+              "name": "remark",
+              "type": "Intro",
+              "remark": "",
+              "chnname": "备注"
+            },
+            {
+              "name": "del_flag",
+              "type": "Char",
+              "remark": "（0代表存在 2代表删除）",
+              "chnname": "删除状态",
+              "notNull": false,
+              "defaultValue": "0"
+            },
+            {
+              "name": "create_by",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人",
+              "notNull": false
+            },
+            {
+              "name": "create_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间",
+              "notNull": false
+            },
+            {
+              "name": "update_by",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人",
+              "notNull": false
+            },
+            {
+              "name": "update_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间",
+              "notNull": false
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "维修花费表",
+          "remark": "维修工单子表"
         }
       ],
       "graphCanvas": {

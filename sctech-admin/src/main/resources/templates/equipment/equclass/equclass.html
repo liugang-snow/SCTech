@@ -123,23 +123,23 @@
 		/* 分类状态显示 */
 		function statusTools(row) {
 		    if (row.status == 1) {
-    			return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.classId + '\')"></i> ';
+    			return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.classId + '\',\'' + row.ancestors + '\')"></i> ';
     		} else {
-    			return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.classId + '\')"></i> ';
+    			return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.classId + '\',\'' + row.ancestors + '\')"></i> ';
     		}
 		}
 		
 		/* 设备分类管理-停用 */
-		function disable(classId) {
-			$.modal.confirm("确认要停用该分类吗？", function() {
-				$.operate.post(prefix + "/changeStatus", { "classId": classId, "status": 1 });
+		function disable(classId, ancestors) {
+			$.modal.confirm("确认要停用该分类及其所有下级分类吗？", function() {
+				$.operate.post(prefix + "/updateStatus", { "classId": classId, "ancestors": ancestors, "status": 1 });
 		    })
 		}
 
 		/* 设备分类管理-启用 */
-		function enable(classId) {
-			$.modal.confirm("确认要启用该分类吗？", function() {
-				$.operate.post(prefix + "/changeStatus", { "classId": classId, "status": 0 });
+		function enable(classId, ancestors) {
+			$.modal.confirm("确认要启用该分类及其所有下级分类吗？", function() {
+				$.operate.post(prefix + "/updateStatus", { "classId": classId, "ancestors": ancestors, "status": 0 });
 		    })
 		}		
     </script>

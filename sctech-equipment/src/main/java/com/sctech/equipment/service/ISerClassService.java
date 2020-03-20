@@ -1,8 +1,9 @@
 package com.sctech.equipment.service;
 
 import com.sctech.equipment.domain.SerClass;
+import com.sctech.equipment.domain.ZtreeSClass;
+
 import java.util.List;
-import com.sctech.common.core.domain.Ztree;
 
 /**
  * 维修分类Service接口
@@ -61,17 +62,18 @@ public interface ISerClassService
     public int deleteSerClassById(Long sclassId);
 
     /**
+     * 更新维修分类状态
+     * 
+     * @param serClass 维修分类
+     * @return 结果
+     */
+    public int updateStatus(SerClass serClass);
+    
+    /**
      * 查询维修分类树列表
      * 
      * @return 所有维修分类信息
      */
-    public List<Ztree> selectSerClassTree();
+    public List<ZtreeSClass> selectSerClassTree();
     
-    /**
-     * 维修分类状态修改
-     * 
-     * @param serClass 维修分类信息
-     * @return 结果
-     */
-    public int changeStatus(SerClass serClass);
 }

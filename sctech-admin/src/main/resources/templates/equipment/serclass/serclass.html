@@ -141,23 +141,23 @@
         /* 状态显示 */
 		function statusTools(row) {
 		    if (row.status == 1) {
-    			return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.sclassId + '\')"></i> ';
+    			return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.sclassId + '\',\'' + row.ancestors + '\')"></i> ';
     		} else {
-    			return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.sclassId + '\')"></i> ';
+    			return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.sclassId + '\',\'' + row.ancestors + '\')"></i> ';
     		}
 		}
         
 		/* 维修分类管理-停用 */
-		function disable(sclassId) {
-			$.modal.confirm("确认要停用该分类吗？", function() {
-				$.operate.post(prefix + "/changeStatus", { "sclassId": sclassId, "status": 1 });
+		function disable(sclassId, ancestors) {
+			$.modal.confirm("确认要停用该分类及其所有下级分类吗？", function() {
+				$.operate.post(prefix + "/updateStatus", { "sclassId": sclassId, "ancestors": ancestors, "status": 1 });
 		    })
 		}
 
 		/* 维修分类管理-启用 */
-		function enable(sclassId) {
-			$.modal.confirm("确认要启用该分类吗？", function() {
-				$.operate.post(prefix + "/changeStatus", { "sclassId": sclassId, "status": 0 });
+		function enable(sclassId, ancestors) {
+			$.modal.confirm("确认要启用该分类及其所有下级分类吗？", function() {
+				$.operate.post(prefix + "/updateStatus", { "sclassId": sclassId, "ancestors": ancestors, "status": 0 });
 		    })
 		}
     </script>

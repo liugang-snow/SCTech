@@ -97,4 +97,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
     
+    <select id="selectSerStaffAll" parameterType="Long" resultMap="SerStaffResult">
+        <include refid="selectSerStaffVo"/>
+        <where> 
+			s.team_id = #{teamId} 
+            and s.del_flag = '0'
+        	order by s.create_time asc        
+        </where>
+    </select>
+    
+    <select id="selectSerStaffs" parameterType="Long" resultMap="SerStaffResult">
+        <include refid="selectSerStaffVo"/>
+        <where> 
+			find_in_set ( s.staff_id, (select staff_ids from ser_card where scard_id = #{scardId} ) ) 
+            and s.del_flag = '0'
+        	order by s.create_time asc        
+        </where>
+    </select>
+    
+    <select id="checkSerstaffUnique" resultMap="SerStaffResult">
+    	<include refid="selectSerStaffVo"/>
+    	<where> 
+			s.user_id = #{userId} 
+			and s.team_id = #{teamId}
+            and s.del_flag = '0'      
+        </where>
+    </select>
+    
+    <select id="checkSerstaffLeader" parameterType="Long" resultMap="SerStaffResult">
+    	<include refid="selectSerStaffVo"/>
+    	<where> 
+			s.team_id = #{teamId} 
+			and s.staff_post = '1'
+            and s.del_flag = '0'      
+        </where>
+    </select>
+       
 </mapper>

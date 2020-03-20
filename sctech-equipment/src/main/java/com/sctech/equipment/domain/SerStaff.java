@@ -40,6 +40,9 @@ public class SerStaff extends BaseEntity
 
     /** 删除状态 （0代表存在 2代表删除） */
     private String delFlag;
+    
+    /** 选中状态  */
+    private boolean flag;
 
     public void setStaffId(Long staffId) 
     {
@@ -113,7 +116,16 @@ public class SerStaff extends BaseEntity
     {
         return delFlag;
     }
+    public void setFlag(boolean flag) 
+    {
+        this.flag = flag;
+    }
 
+    public boolean getFlag() 
+    {
+        return flag;
+    }
+    
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)

@@ -204,10 +204,10 @@ public class EquClassController extends BaseController
      */
     @Log(title = "设备分类管理", businessType = BusinessType.UPDATE)
     @RequiresPermissions("equipment:equclass:edit")
-    @PostMapping("/changeStatus")
+    @PostMapping("/updateStatus")
     @ResponseBody
-    public AjaxResult changeStatus(EquClass equClass)
+    public AjaxResult updateStatus(EquClass equClass)
     {
-        return toAjax(equClassService.changeStatus(equClass));
+        return toAjax(equClassService.updateStatus(equClass));
     }
 }

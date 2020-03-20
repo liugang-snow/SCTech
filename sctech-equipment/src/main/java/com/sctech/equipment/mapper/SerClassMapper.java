@@ -58,4 +58,20 @@ public interface SerClassMapper
      * @return 结果
      */
     public int deleteSerClassByIds(String[] sclassIds);
+    
+    /**
+     * 更新维修分类状态--停用
+     * 
+     * @param serClass 维修分类
+     * @return 结果
+     */
+    public int updateStatusD(SerClass serClass);
+    
+    /**
+     * 更新维修分类状态--启用
+     * 
+     * @param serClass 维修分类
+     * @return 结果
+     */
+    public int updateStatusE(SerClass serClass);
 }

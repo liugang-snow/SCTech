@@ -61,17 +61,18 @@ public interface IEquAreaService
     public int deleteEquAreaById(Long areaId);
 
     /**
+     * 更新设备所在区域状态
+     * 
+     * @param equArea 设备所在区域
+     * @return 结果
+     */
+    public int updateStatus(EquArea equArea);
+    
+    /**
      * 查询设备所在区域树列表
      * 
      * @return 所有设备所在区域信息
      */
     public List<Ztree> selectEquAreaTree();
     
-    /**
-     * 设备所在区域状态修改
-     * 
-     * @param equArea 设备所在区域信息
-     * @return 结果
-     */
-    public int changeStatus(EquArea equArea);
 }

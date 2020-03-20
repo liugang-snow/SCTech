@@ -25,7 +25,7 @@ public class Ztree implements Serializable
     
     /** 节点标题 */
     private String title;
-
+    
     /** 是否勾选 */
     private boolean checked = false;
 
@@ -84,7 +84,7 @@ public class Ztree implements Serializable
     {
         this.title = title;
     }
-
+  
     public boolean isChecked()
     {
         return checked;

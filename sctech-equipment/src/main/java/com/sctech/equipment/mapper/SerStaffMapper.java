@@ -3,6 +3,8 @@ package com.sctech.equipment.mapper;
 import com.sctech.equipment.domain.SerStaff;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 /**
  * 维修人员Mapper接口
  * 
@@ -58,4 +60,37 @@ public interface SerStaffMapper
      * @return 结果
      */
     public int deleteSerStaffByIds(String[] staffIds);
+    
+    /**
+     * 获取全部维修人员
+     * 
+     * @param teamId 维修班组ID
+     * @return 维修人员集合
+     */
+    public List<SerStaff> selectSerStaffAll(Long teamId);
+    
+    /**
+     * 获取维修人员--工单编辑
+     * 
+     * @param scardId 维修工单ID
+     * @return 维修人员集合
+     */
+    public List<SerStaff> selectSerStaffs(Long scardId);
+    
+    /**
+     * 校验设备分类名称是否唯一
+     * 
+     * @param userId 用户id
+     * @param teamId 班组id 
+     * @return
+     */
+    public SerStaff checkSerstaffUnique(@Param("userId") Long userId, @Param("teamId") Long teamId);
+    
+    /**
+     * 获取维修班组的组长
+     * 
+     * @param teamId 维修班组ID
+     * @return 维修人员集合
+     */
+    public SerStaff checkSerstaffLeader(Long teamId);
 }

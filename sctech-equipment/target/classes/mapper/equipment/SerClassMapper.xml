@@ -128,4 +128,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
     
+    <update id="updateStatusD" parameterType="SerClass">
+        update ser_class set status = #{status} 
+        where (sclass_id = #{sclassId} 
+        or ancestors like concat(#{ancestors}, ',', #{sclassId}, '%')) 
+        and del_flag = '0'	
+    </update>
+	
+	<update id="updateStatusE" parameterType="SerClass">
+        update ser_class set status = #{status} 
+        where (sclass_id = #{sclassId} 
+        or ancestors like concat(#{ancestors}, ',', #{sclassId}, '%')
+	   	or find_in_set (sclass_id, #{ancestors})) 
+	   	and del_flag = '0'
+    </update>
+    
 </mapper>

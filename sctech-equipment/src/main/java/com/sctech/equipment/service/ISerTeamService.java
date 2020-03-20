@@ -61,17 +61,18 @@ public interface ISerTeamService
     public int deleteSerTeamById(Long teamId);
 
     /**
+     * 更新维修班组状态
+     * 
+     * @param serTeam 维修班组
+     * @return 结果
+     */
+    public int updateStatus(SerTeam serTeam);
+    
+    /**
      * 查询维修班组树列表
      * 
      * @return 所有维修班组信息
      */
     public List<Ztree> selectSerTeamTree();
     
-    /**
-     * 维修班组状态修改
-     * 
-     * @param serTeam 维修班组信息
-     * @return 结果
-     */
-    public int changeStatus(SerTeam serTeam);
 }

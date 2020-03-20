@@ -920,6 +920,25 @@ var table = {
         	    };
         	    $.ajax(config)
             },
+            // 提交数据 LG* 2020-03-17
+            submitn: function(url, type, dataType, data, callback) {
+            	var config = {
+            	        url: url,
+            	        type: type,
+            	        dataType: dataType,
+            	        data: data,
+            	        beforeSend: function () {
+            	        	$.modal.loading("正在处理中，请稍后...");
+            	        },
+            	        success: function(result) {
+            	        	if (typeof callback == "function") {
+            	        	    callback(result);
+            	        	}
+            	        	$.modal.closeLoading();
+            	        }
+            	    };
+            	    $.ajax(config)
+            },
             // post请求传输
             post: function(url, data, callback) {
             	$.operate.submit(url, "post", "json", data, callback);

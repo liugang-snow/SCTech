@@ -122,23 +122,23 @@
         /* 状态显示 */
 		function statusTools(row) {
 		    if (row.status == 1) {
-    			return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.teamId + '\')"></i> ';
+    			return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.teamId + '\',\'' + row.ancestors + '\')"></i> ';
     		} else {
-    			return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.teamId + '\')"></i> ';
+    			return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.teamId + '\',\'' + row.ancestors + '\')"></i> ';
     		}
 		}
         
 		/* 维修班组管理-停用 */
-		function disable(teamId) {
-			$.modal.confirm("确认要停用该班组吗？", function() {
-				$.operate.post(prefix + "/changeStatus", { "teamId": teamId, "status": 1 });
+		function disable(teamId, ancestors) {
+			$.modal.confirm("确认要停用该班组及其所有下级班组吗？", function() {
+				$.operate.post(prefix + "/updateStatus", { "teamId": teamId, "ancestors": ancestors, "status": 1 });
 		    })
 		}
 
 		/* 维修班组管理-启用 */
-		function enable(teamId) {
-			$.modal.confirm("确认要启用该班组吗？", function() {
-				$.operate.post(prefix + "/changeStatus", { "teamId": teamId, "status": 0 });
+		function enable(teamId, ancestors) {
+			$.modal.confirm("确认要启用该班组及其所有下级班组吗？", function() {
+				$.operate.post(prefix + "/updateStatus", { "teamId": teamId, "ancestors": ancestors, "status": 0 });
 		    })
 		}
     </script>

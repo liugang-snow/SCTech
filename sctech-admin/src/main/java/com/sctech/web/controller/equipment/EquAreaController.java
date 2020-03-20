@@ -180,10 +180,10 @@ public class EquAreaController extends BaseController
      */
     @Log(title = "设备所在区域管理", businessType = BusinessType.UPDATE)
     @RequiresPermissions("equipment:equarea:edit")
-    @PostMapping("/changeStatus")
+    @PostMapping("/updateStatus")
     @ResponseBody
-    public AjaxResult changeStatus(EquArea equArea)
+    public AjaxResult updateStatus(EquArea equArea)
     {
-        return toAjax(equAreaService.changeStatus(equArea));
+        return toAjax(equAreaService.updateStatus(equArea));
     }
 }

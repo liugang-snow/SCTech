@@ -117,4 +117,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
     
+    <update id="updateStatusD" parameterType="EquArea">
+        update equ_area set status = #{status} 
+        where (area_id = #{areaId} 
+        or ancestors like concat(#{ancestors}, ',', #{areaId}, '%')) 
+        and del_flag = '0'	
+    </update>
+	
+	<update id="updateStatusE" parameterType="EquArea">
+        update equ_area set status = #{status} 
+        where (area_id = #{areaId} 
+        or ancestors like concat(#{ancestors}, ',', #{areaId}, '%')
+	   	or find_in_set (area_id, #{ancestors})) 
+	   	and del_flag = '0'
+    </update>
+    
 </mapper>

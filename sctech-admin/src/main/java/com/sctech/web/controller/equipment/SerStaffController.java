@@ -86,7 +86,12 @@ public class SerStaffController extends BaseController
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(SerStaff serStaff)
-    {  	
+    { 
+    	if (!serStaffService.checkSerstaffUnique(serStaff))
+    		return error("新增维修人员失败，该人员已在该维修班组中");
+    	if (!serStaffService.checkSerstaffLeader(serStaff))
+    		return error("新增维修人员失败，该维修组已存在组长");
+    	
 		serStaff.setCreateBy(ShiroUtils.getLoginName());
         return toAjax(serStaffService.insertSerStaff(serStaff));
     }
@@ -111,6 +116,10 @@ public class SerStaffController extends BaseController
     @ResponseBody
     public AjaxResult editSave(SerStaff serStaff)
     {
+    	if (!serStaffService.checkSerstaffUnique(serStaff))
+    		return error("新增维修人员失败，该人员已在该维修班组中");
+    	if (!serStaffService.checkSerstaffLeader(serStaff))
+    		return error("修改维修人员失败，该维修组已存在组长");
 		serStaff.setUpdateBy(ShiroUtils.getLoginName());
         return toAjax(serStaffService.updateSerStaff(serStaff));
     }
@@ -125,5 +134,27 @@ public class SerStaffController extends BaseController
     public AjaxResult remove(String ids)
     {
         return toAjax(serStaffService.deleteSerStaffByIds(ids));
+    }
+    
+    /**
+     * 获取维修人员
+     */
+    @GetMapping("/selectSerStaffAll/{teamId}")
+    @ResponseBody
+    public List<SerStaff> selectSerStaffAll(@PathVariable("teamId") Long teamId)
+    {
+        List<SerStaff> serStaffs = serStaffService.selectSerStaffAll(teamId);
+        return serStaffs;
+    }
+    
+    /**
+     * 获取维修人员--工单编辑
+     */
+    @GetMapping("/getSelectStaffs/{scardId}")
+    @ResponseBody
+    public List<SerStaff> getSelectStaffs(@PathVariable("scardId") Long scardId)
+    {	
+        List<SerStaff> serStaffs = serStaffService.getSelectStaffs(scardId);
+        return serStaffs;
     }
 }

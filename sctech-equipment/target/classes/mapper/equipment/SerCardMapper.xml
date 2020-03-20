@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sctech.equipment.mapper.SerCardMapper">
+    
+    <resultMap type="SerCard" id="SerCardResult">
+        <result property="scardId"    column="scard_id"    />
+        <result property="scardGuid"    column="scard_guid"    />
+        <result property="scardCode"    column="scard_code"    />
+        <result property="sclassId"    column="sclass_id"    />
+        <result property="sclassEmergency"    column="sclass_emergency"    />
+        <result property="scardOrigin"    column="scard_origin"    />
+        <result property="repairDate"    column="repair_date"    />
+        <result property="repairContacts"    column="repair_contacts"    />
+        <result property="repairPhone"    column="repair_phone"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="areaId"    column="area_id"    />
+        <result property="repairDescription"    column="repair_description"    />
+        <result property="teamId"    column="team_id"    />
+        <result property="staffIds"    column="staff_ids"    />
+        <result property="finishDate"    column="finish_date"    />
+        <result property="finishDescription"    column="finish_description"    />
+        <result property="serEvaluation"    column="ser_evaluation"    />
+        <result property="repEvaluation"    column="rep_evaluation"    />
+        <result property="serOpinion"    column="ser_opinion"    />
+        <result property="remark"    column="remark"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSerCardVo">
+        select s.*, c.fullname as sclassName, d.dept_name as deptName, e.fullname as areaName, t.fullname as teamName from ser_card s
+        left join ser_class c on c.sclass_id = s.sclass_id
+        left join sys_dept d on d.dept_id = s.dept_id
+        left join equ_area e on e.area_id = s.area_id
+        left join ser_team t on t.team_id = s.team_id
+    </sql>
+
+    <select id="selectSerCardList" parameterType="SerCard" resultMap="SerCardResult">
+        <include refid="selectSerCardVo"/>
+        <where>  
+            <if test="scardCode != null  and scardCode != ''"> 
+            	and scard_code like concat('%', #{scardCode}, '%')
+            </if>
+            <if test="sclassId != null "> 
+            	and s.sclass_id = #{sclassId}
+            </if>
+            <if test="sclassEmergency != null  and sclassEmergency != ''"> 
+            	and s.sclass_emergency = #{sclassEmergency}
+            </if>
+            <if test="repairContacts != null  and repairContacts != ''"> 
+            	and s.repair_contacts like concat('%', #{repairContacts}, '%')
+           	</if>
+            <if test="areaId != null "> 
+            	and s.area_id = #{areaId}
+            </if>
+            <if test="params.beginRepairDate != null and params.beginRepairDate != ''"><!-- 开始时间检索 -->
+				and date_format(s.repair_date,'%y%m%d') &gt;= date_format(#{params.beginRepairDate},'%y%m%d')
+			</if>
+			<if test="params.endRepairDate != null and params.endRepairDate != ''"><!-- 结束时间检索 -->
+				and date_format(s.repair_date,'%y%m%d') &lt;= date_format(#{params.endRepairDate},'%y%m%d')
+			</if>
+            and s.del_flag = '0'
+        	order by s.create_time desc
+        </where>
+    </select>
+    
+    <select id="selectSerCardById" parameterType="Long" resultMap="SerCardResult">
+        <include refid="selectSerCardVo"/>
+        where scard_id = #{scardId}
+    </select>
+        
+    <insert id="insertSerCard" parameterType="SerCard" useGeneratedKeys="true" keyProperty="scardId">
+        insert into ser_card
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="scardGuid != null  and scardGuid != ''">scard_guid,</if>
+            <if test="scardCode != null  and scardCode != ''">scard_code,</if>
+            <if test="sclassId != null ">sclass_id,</if>
+            <if test="sclassEmergency != null  and sclassEmergency != ''">sclass_emergency,</if>
+            <if test="scardOrigin != null  and scardOrigin != ''">scard_origin,</if>
+            <if test="repairDate != null ">repair_date,</if>
+            <if test="repairContacts != null  and repairContacts != ''">repair_contacts,</if>
+            <if test="repairPhone != null  and repairPhone != ''">repair_phone,</if>
+            <if test="deptId != null ">dept_id,</if>
+            <if test="areaId != null ">area_id,</if>
+            <if test="repairDescription != null  and repairDescription != ''">repair_description,</if>
+            <if test="teamId != null ">team_id,</if>
+            <if test="staffIds != null  and staffIds != ''">staff_ids,</if>
+            <if test="finishDate != null ">finish_date,</if>
+            <if test="finishDescription != null  and finishDescription != ''">finish_description,</if>
+            <if test="serEvaluation != null  and serEvaluation != ''">ser_evaluation,</if>
+            <if test="repEvaluation != null  and repEvaluation != ''">rep_evaluation,</if>
+            <if test="serOpinion != null  and serOpinion != ''">ser_opinion,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="scardGuid != null  and scardGuid != ''">#{scardGuid},</if>
+            <if test="scardCode != null  and scardCode != ''">#{scardCode},</if>
+            <if test="sclassId != null ">#{sclassId},</if>
+            <if test="sclassEmergency != null  and sclassEmergency != ''">#{sclassEmergency},</if>
+            <if test="scardOrigin != null  and scardOrigin != ''">#{scardOrigin},</if>
+            <if test="repairDate != null ">#{repairDate},</if>
+            <if test="repairContacts != null  and repairContacts != ''">#{repairContacts},</if>
+            <if test="repairPhone != null  and repairPhone != ''">#{repairPhone},</if>
+            <if test="deptId != null ">#{deptId},</if>
+            <if test="areaId != null ">#{areaId},</if>
+            <if test="repairDescription != null  and repairDescription != ''">#{repairDescription},</if>
+            <if test="teamId != null ">#{teamId},</if>
+            <if test="staffIds != null  and staffIds != ''">#{staffIds},</if>
+            <if test="finishDate != null ">#{finishDate},</if>
+            <if test="finishDescription != null  and finishDescription != ''">#{finishDescription},</if>
+            <if test="serEvaluation != null  and serEvaluation != ''">#{serEvaluation},</if>
+            <if test="repEvaluation != null  and repEvaluation != ''">#{repEvaluation},</if>
+            <if test="serOpinion != null  and serOpinion != ''">#{serOpinion},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSerCard" parameterType="SerCard">
+        update ser_card
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="scardGuid != null  and scardGuid != ''">scard_guid = #{scardGuid},</if>
+            <if test="scardCode != null  and scardCode != ''">scard_code = #{scardCode},</if>
+            <if test="sclassId != null ">sclass_id = #{sclassId},</if>
+            <if test="sclassEmergency != null  and sclassEmergency != ''">sclass_emergency = #{sclassEmergency},</if>
+            <if test="scardOrigin != null  and scardOrigin != ''">scard_origin = #{scardOrigin},</if>
+            <if test="repairDate != null ">repair_date = #{repairDate},</if>
+            <if test="repairContacts != null  and repairContacts != ''">repair_contacts = #{repairContacts},</if>
+            <if test="repairPhone != null  and repairPhone != ''">repair_phone = #{repairPhone},</if>
+            <if test="deptId != null ">dept_id = #{deptId},</if>
+            <if test="areaId != null ">area_id = #{areaId},</if>
+            <if test="repairDescription != null  and repairDescription != ''">repair_description = #{repairDescription},</if>
+            <if test="teamId != null ">team_id = #{teamId},</if>
+            <if test="staffIds != null  and staffIds != ''">staff_ids = #{staffIds},</if>
+            <if test="finishDate != null ">finish_date = #{finishDate},</if>
+            <if test="finishDescription != null  and finishDescription != ''">finish_description = #{finishDescription},</if>
+            <if test="serEvaluation != null  and serEvaluation != ''">ser_evaluation = #{serEvaluation},</if>
+            <if test="repEvaluation != null  and repEvaluation != ''">rep_evaluation = #{repEvaluation},</if>
+            <if test="serOpinion != null  and serOpinion != ''">ser_opinion = #{serOpinion},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where scard_id = #{scardId}
+    </update>
+
+    <delete id="deleteSerCardById" parameterType="Long">
+        update ser_card set del_flag = '2' where scard_id = #{scardId}
+    </delete>
+
+    <delete id="deleteSerCardByIds" parameterType="String">
+        update ser_card set del_flag = '2' where scard_id in
+        <foreach item="scardId" collection="array" open="(" separator="," close=")">
+            #{scardId}
+        </foreach>
+    </delete>
+    
+</mapper>

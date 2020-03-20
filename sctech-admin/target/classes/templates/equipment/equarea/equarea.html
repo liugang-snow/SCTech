@@ -122,26 +122,25 @@
         /* 状态显示 */
 		function statusTools(row) {
 		    if (row.status == 1) {
-    			return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.classId + '\')"></i> ';
+    			return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.areaId + '\',\'' + row.ancestors + '\')"></i> ';
     		} else {
-    			return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.classId + '\')"></i> ';
+    			return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.areaId + '\',\'' + row.ancestors + '\')"></i> ';
     		}
 		}
         
 		/* 停用 */
-		function disable(classId) {
-			$.modal.confirm("确认要停用该区域吗？", function() {
-				$.operate.post(prefix + "/changeStatus", { "classId": classId, "status": 1 });
+		function disable(areaId, ancestors) {
+			$.modal.confirm("确认要停用该区域及其所有下级区域吗？", function() {
+				$.operate.post(prefix + "/updateStatus", { "areaId": areaId, "ancestors": ancestors, "status": 1 });
 		    })
 		}
 
 		/* 启用 */
-		function enable(classId) {
-			$.modal.confirm("确认要启用该区域吗？", function() {
-				$.operate.post(prefix + "/changeStatus", { "classId": classId, "status": 0 });
+		function enable(areaId, ancestors) {
+			$.modal.confirm("确认要启用该区域及其所有下级区域吗？", function() {
+				$.operate.post(prefix + "/updateStatus", { "areaId": areaId, "ancestors": ancestors, "status": 0 });
 		    })
-		}
-		
+		}		
     </script>
 </body>
 </html>

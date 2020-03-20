@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sctech.equipment.mapper.SerExpenseMapper">
+    
+    <resultMap type="SerExpense" id="SerExpenseResult">
+        <result property="expenseId"    column="expense_id"    />
+        <result property="expenseGuid"    column="expense_guid"    />
+        <result property="scardId"    column="scard_id"    />
+        <result property="expenseDesc"    column="expense_desc"    />
+        <result property="expenseUnits"    column="expense_units"    />
+        <result property="expenseQuan"    column="expense_quan"    />
+        <result property="expensePrice"    column="expense_price"    />
+        <result property="expenseSum"    column="expense_sum"    />
+        <result property="remark"    column="remark"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSerExpenseVo">
+        select e.* from ser_expense e
+    </sql>
+
+    <select id="selectSerExpenseList" parameterType="SerExpense" resultMap="SerExpenseResult">
+        <include refid="selectSerExpenseVo"/>
+        <where>  
+            <if test="scardId != null "> 
+            	and scard_id = #{scardId}
+            </if>
+            <if test="expenseDesc != null  and expenseDesc != ''"> 
+            	and expense_desc like concat('%', #{expenseDesc}, '%')
+            </if>
+            and del_flag = '0'
+        	order by create_time desc
+        </where>
+    </select>
+    
+    <select id="selectSerExpenseById" parameterType="Long" resultMap="SerExpenseResult">
+        <include refid="selectSerExpenseVo"/>
+        where expense_id = #{expenseId}
+    </select>
+        
+    <insert id="insertSerExpense" parameterType="SerExpense" useGeneratedKeys="true" keyProperty="expenseId">
+        insert into ser_expense
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="expenseGuid != null  and expenseGuid != ''">expense_guid,</if>
+            <if test="scardId != null ">scard_id,</if>
+            <if test="expenseDesc != null  and expenseDesc != ''">expense_desc,</if>
+            <if test="expenseUnits != null  and expenseUnits != ''">expense_units,</if>
+            <if test="expenseQuan != null ">expense_quan,</if>
+            <if test="expensePrice != null ">expense_price,</if>
+            <if test="expenseSum != null ">expense_sum,</if>
+            <if test="remark != null  and remark != ''">remark,</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="expenseGuid != null  and expenseGuid != ''">#{expenseGuid},</if>
+            <if test="scardId != null ">#{scardId},</if>
+            <if test="expenseDesc != null  and expenseDesc != ''">#{expenseDesc},</if>
+            <if test="expenseUnits != null  and expenseUnits != ''">#{expenseUnits},</if>
+            <if test="expenseQuan != null ">#{expenseQuan},</if>
+            <if test="expensePrice != null ">#{expensePrice},</if>
+            <if test="expenseSum != null ">#{expenseSum},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSerExpense" parameterType="SerExpense">
+        update ser_expense
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="expenseGuid != null  and expenseGuid != ''">expense_guid = #{expenseGuid},</if>
+            <if test="scardId != null ">scard_id = #{scardId},</if>
+            <if test="expenseDesc != null  and expenseDesc != ''">expense_desc = #{expenseDesc},</if>
+            <if test="expenseUnits != null  and expenseUnits != ''">expense_units = #{expenseUnits},</if>
+            <if test="expenseQuan != null ">expense_quan = #{expenseQuan},</if>
+            <if test="expensePrice != null ">expense_price = #{expensePrice},</if>
+            <if test="expenseSum != null ">expense_sum = #{expenseSum},</if>
+            <if test="remark != null  and remark != ''">remark = #{remark},</if>
+            <if test="delFlag != null  and delFlag != ''">del_flag = #{delFlag},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where expense_id = #{expenseId}
+    </update>
+
+    <delete id="deleteSerExpenseById" parameterType="Long">
+        update ser_expense set del_flag = '2' where expense_id = #{expenseId}
+    </delete>
+
+	<delete id="deleteSerExpenseByIdd" parameterType="Long">
+        delete from ser_expense where expense_id = #{expenseId}
+    </delete>
+    
+    <delete id="deleteSerExpenseByIds" parameterType="String">
+        update ser_expense set del_flag = '2' where expense_id in
+        <foreach item="expenseId" collection="array" open="(" separator="," close=")">
+            #{expenseId}
+        </foreach>
+    </delete>
+    
+    <delete id="deleteSerExpenseByIdsd" parameterType="String">
+        delete from ser_expense where expense_id in 
+        <foreach item="expenseId" collection="array" open="(" separator="," close=")">
+            #{expenseId}
+        </foreach>
+    </delete>
+    
+</mapper>

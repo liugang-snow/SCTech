@@ -101,6 +101,21 @@ public class SerTeamServiceImpl implements ISerTeamService
     }
 
     /**
+     * 更新维修班组状态
+     * 
+     * @param serTeam 维修班组
+     * @return 结果
+     */
+    @Override
+    public int updateStatus(SerTeam serTeam)
+    {
+    	if (serTeam.getStatus().equals("1"))
+    		return serTeamMapper.updateStatusD(serTeam);
+    	else
+    		return serTeamMapper.updateStatusE(serTeam);
+    }
+    
+    /**
      * 查询维修班组树列表
      * 
      * @return 所有维修班组信息
@@ -112,25 +127,17 @@ public class SerTeamServiceImpl implements ISerTeamService
         List<Ztree> ztrees = new ArrayList<Ztree>();
         for (SerTeam serTeam : serTeamList)
         {
-            Ztree ztree = new Ztree();
-            ztree.setId(serTeam.getTeamId());
-            ztree.setpId(serTeam.getParentId());
-            ztree.setName(serTeam.getTeamName());
-            ztree.setTitle(serTeam.getTeamName());
-            ztrees.add(ztree);
+        	if(serTeam.getStatus().equals("0"))
+        	{
+	            Ztree ztree = new Ztree();
+	            ztree.setId(serTeam.getTeamId());
+	            ztree.setpId(serTeam.getParentId());
+	            ztree.setName(serTeam.getTeamName());
+	            ztree.setTitle(serTeam.getTeamName());
+	            ztrees.add(ztree);
+        	}
         }
         return ztrees;
     }
     
-    /**
-     * 维修班组状态修改
-     * 
-     * @param serTeam 维修班组信息
-     * @return 结果
-     */
-    @Override
-    public int changeStatus(SerTeam serTeam)
-    {
-        return serTeamMapper.updateSerTeam(serTeam);
-    }
 }

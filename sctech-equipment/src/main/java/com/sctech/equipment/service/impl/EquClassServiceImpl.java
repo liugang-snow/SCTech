@@ -101,6 +101,21 @@ public class EquClassServiceImpl implements IEquClassService
     }
 
     /**
+     * 更新设备分类状态
+     * 
+     * @param equClass 设备分类
+     * @return 结果
+     */
+    @Override
+    public int updateStatus(EquClass equClass)
+    {
+    	if (equClass.getStatus().equals("1"))
+    		return equClassMapper.updateStatusD(equClass);
+    	else
+    		return equClassMapper.updateStatusE(equClass);
+    }
+    
+    /**
      * 查询设备分类树列表
      * 
      * @return 所有设备分类信息
@@ -112,13 +127,16 @@ public class EquClassServiceImpl implements IEquClassService
         List<Ztree> ztrees = new ArrayList<Ztree>();
         for (EquClass equClass : equClassList)
         {
-            Ztree ztree = new Ztree();
-            ztree.setId(equClass.getClassId());
-            ztree.setpId(equClass.getParentId());
-            ztree.setName(equClass.getClassName());
-            ztree.setNames(equClass.getFullname());
-            ztree.setTitle(equClass.getClassName());
-            ztrees.add(ztree);
+        	if(equClass.getStatus().equals("0"))
+        	{
+	            Ztree ztree = new Ztree();
+	            ztree.setId(equClass.getClassId());
+	            ztree.setpId(equClass.getParentId());
+	            ztree.setName(equClass.getClassName());
+	            ztree.setNames(equClass.getFullname());
+	            ztree.setTitle(equClass.getClassName());
+	            ztrees.add(ztree);
+        	}
         }
         return ztrees;
     }
@@ -129,6 +147,7 @@ public class EquClassServiceImpl implements IEquClassService
      * @param equClass 设备分类信息
      * @return 结果
      */
+    @Override
     public boolean checkClassNameUnique(EquClass equClass)
     {
     	Long classID = StringUtils.isNull(equClass.getClassId())? -1L : equClass.getClassId();
@@ -138,15 +157,4 @@ public class EquClassServiceImpl implements IEquClassService
     	return true;    	
     }
       
-    /**
-     * 设备分类状态修改
-     * 
-     * @param equClass 设备分类信息
-     * @return 结果
-     */
-    @Override
-    public int changeStatus(EquClass equClass)
-    {
-        return equClassMapper.updateEquClass(equClass);
-    }
 }

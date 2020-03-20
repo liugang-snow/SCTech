@@ -58,4 +58,45 @@ public interface ISerStaffService
      * @return 结果
      */
     public int deleteSerStaffById(Long staffId);
+    
+    /**
+     * 获取维修人员
+     * 
+     * @param teamId 维修班组ID
+     * @return 维修人员集合
+     */
+    public List<SerStaff> selectSerStaffAll(Long teamId);
+    
+    /**
+     * 获取维修人员
+     * 
+     * @param scardId 维修单ID
+     * @return 维修人员集合
+     */
+    public List<SerStaff> selectSerStaffs(Long scardId);
+    
+    /**
+     * 获取维修人员--工单编辑
+     * 
+     * @param scardId 维修工单ID
+     * @return 维修人员集合
+     */
+    public List<SerStaff> getSelectStaffs(Long scardId);
+   
+    /**
+     * 检查组长
+     * 
+     * @param serStaff
+     * @return
+     */
+    public Boolean checkSerstaffUnique(SerStaff serStaff);
+    
+    /**
+     * 检查组长
+     * 
+     * @param serStaff
+     * @return
+     */
+    public Boolean checkSerstaffLeader(SerStaff serStaff);
+    
 }

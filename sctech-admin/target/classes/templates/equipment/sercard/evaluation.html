@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('维修评价')" />
+    <th:block th:include="include :: Labelauty-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-evaluation-edit" th:object="${serCard}">
+            <input id="scardId" name="scardId" th:field="*{scardId}" type="hidden">
+            <h4 class="form-header h4">报修信息</h4>
+            <div class="form-group">    
+                <label class="col-sm-2 control-label">维修单号：</label>
+                <div class="col-sm-8">
+                    <div class="form-control-static color-slategray" th:text="${serCard?.scardCode}"></div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-2 control-label">报修时间：</label>
+                <div class="col-sm-3">
+                    <div class="form-control-static color-slategray" th:text="${#dates.format(serCard.repairDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
+                </div>
+                <label class="col-sm-2 control-label">维修完成时间：</label>
+                <div class="col-sm-3">
+                    <div class="form-control-static color-slategray" th:text="${#dates.format(serCard.finishDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-2 control-label">报修内容：</label>
+                <div class="col-sm-8">
+                    <div class="form-control-static color-slategray" th:text="${serCard?.repairDescription}"></div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-2 control-label">维修班组：</label>
+                <div class="col-sm-8">
+                    <div class="form-control-static color-slategray" th:text="${serCard?.teamName}"></div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-2 control-label">维修人员：</label>
+                <div class="col-sm-8">
+                    <div class="form-control-static color-slategray" th:text="${serStaffsName}"></div>
+                </div>
+            </div>
+            <h4 class="form-header h4">维修评价</h4>
+            <div class="form-group">    
+                <label class="col-sm-2 control-label">服务态度评价：</label>
+                <div class="col-sm-8">
+                    <ul class="dowebok" th:with="type=${@dict.getType('ser_evaluation_type')}">
+                    	<li th:each="dict : ${type}"><input type="radio" name="serEvaluation" th:data-labelauty="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{serEvaluation}"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-2 control-label">工作质量评价：</label>
+                <div class="col-sm-8">
+                	<ul class="dowebok" th:with="type=${@dict.getType('ser_evaluation_type')}">
+                    	<li th:each="dict : ${type}"><input type="radio" name="repEvaluation" th:data-labelauty="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{repEvaluation}"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-2 control-label">意见建议：</label>
+                <div class="col-sm-8">
+                    <textarea name="serOpinion" class="form-control" maxlength="500" placeholder="请输入意见建议" rows="3">[[*{serOpinion}]]</textarea>
+                </div>
+            </div>
+       	</form>
+    </div>        
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: Labelauty-js" />
+    <script type="text/javascript">
+    	var prefix = ctx + "equipment/sercard";
+    
+	    $(function(){
+	    	$(':input[name="serEvaluation"]').labelauty();
+	    	$(':input[name="repEvaluation"]').labelauty();
+	    });
+	    	    
+	    $("#form-evaluation-edit").validate({
+	        focusCleanup: true
+	    });
+	    
+	    function submitHandler() {
+            if ($.validate.form()) {
+            	var data = $('#form-evaluation-edit').serializeArray();
+                $.operate.save(prefix + "/edit", data);
+            }
+        }
+    </script>
+</body>
+</html>

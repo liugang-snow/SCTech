@@ -58,4 +58,20 @@ public interface EquAreaMapper
      * @return 结果
      */
     public int deleteEquAreaByIds(String[] areaIds);
+    
+    /**
+     * 更新设备所在区域状态--停用
+     * 
+     * @param equArea 设备所在区域
+     * @return 结果
+     */
+    public int updateStatusD(EquArea equArea);
+    
+    /**
+     * 更新设备所在区域状态--启用
+     * 
+     * @param equArea 设备所在区域
+     * @return 结果
+     */
+    public int updateStatusE(EquArea equArea);
 }

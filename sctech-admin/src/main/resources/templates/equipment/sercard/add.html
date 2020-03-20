@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增维修工单')" />
+    <th:block th:include="include :: select2-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-sercard-add">
+        	<h4 class="form-header h4">基本信息</h4>
+            <div class="form-group">    
+                <label class="col-sm-2 control-label">维修单号：</label>
+                <div class="col-sm-3">
+                    <input name="scardCode" class="form-control" type="text" th:value="${serCard?.scardCode}" readonly>
+                </div>
+            </div>
+            <h4 class="form-header h4">详细信息</h4>
+            <div class="form-group">    
+                <label class="col-sm-2 control-label is-required">维修分类：</label>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input id="sclassId" name="sclassId" type="hidden"/>
+                        <input class="form-control" type="text" onclick="selects('sclass')" id="sclassName" placeholder="请选择维修分类" readonly required>
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+                <label class="col-sm-2 control-label is-required">紧急程度：</label>
+                <div class="col-sm-3">
+					<select id="sclassEmergency" name="sclassEmergency" th:with="type=${@dict.getType('ser_emergency_type')}" class="form-control m-b" required>
+                    	<option value="">请选择紧急程度</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>            
+            <div class="form-group">    
+                <label class="col-sm-2 control-label is-required">报修来源：</label>
+                <div class="col-sm-3">
+                	<select id="scardOrigin" name="scardOrigin" th:with="type=${@dict.getType('ser_origin_type')}" class="form-control m-b" required>
+                    	<option value="">请选择报修来源</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>   
+                <label class="col-sm-2 control-label is-required">报修时间：</label>
+                <div class="col-sm-3">
+                    <div class="input-group date">
+                    	<input type="text" class="form-control" id="repairDate" name="repairDate" placeholder="yyyy-MM-dd HH:mm:ss" required>
+                    	<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>           
+            <div class="form-group">    
+                <label class="col-sm-2 control-label is-required">联系人：</label>
+                <div class="col-sm-3">
+                    <input name="repairContacts" class="form-control" type="text" placeholder="请输入联系人" required>
+                </div>   
+                <label class="col-sm-2 control-label is-required">联系电话：</label>
+                <div class="col-sm-3">
+                    <input name="repairPhone" class="form-control" type="text" placeholder="请输入联系电话" required>
+                </div>
+            </div>           
+            <div class="form-group">    
+            	<label class="col-sm-2 control-label is-required">报修部门：</label>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input id="deptId" name="deptId" type="hidden"/>
+                        <input class="form-control" type="text" onclick="selects('dept')" id="deptName" placeholder="请选择报修部门" readonly required>
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div> 
+                <label class="col-sm-2 control-label is-required">报修地址：</label>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input id="areaId" name="areaId" type="hidden"/>
+                        <input class="form-control" type="text" onclick="selects('area')" id="areaName" placeholder="请选择报修地址" readonly required>
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-2 control-label is-required">报修内容：</label>
+                <div class="col-sm-8">
+                    <textarea name="repairDescription" class="form-control" maxlength="500" placeholder="请输入报修内容" rows="3" required></textarea>
+                </div>
+            </div>
+            <h4 class="form-header h4">维修信息</h4>
+            <div class="form-group">    
+                <label class="col-sm-2 control-label is-required">维修班组：</label>
+                <div class="col-sm-3">
+                	<div class="input-group">
+	                    <input id="teamId" name="teamId" type="hidden"/>
+	                    <input class="form-control" type="text" onclick="selects('team')" id="teamName" placeholder="请选择维修班组" readonly required>
+	                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+	            	</div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-2 control-label is-required">维修人员：</label>
+                <div class="col-sm-8">
+                    <select id="staffs" class="form-control select2-multiple" multiple required>
+					</select>
+                </div>
+            </div>           
+            <div class="form-group">    
+                <label class="col-sm-2 control-label is-required">维修完成时间：</label>
+                <div class="col-sm-3">
+                    <div class="input-group date">
+                        <input type="text" class="form-control" id="finishDate" name="finishDate" placeholder="yyyy-MM-dd HH:mm:ss" required>
+                    	<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-2 control-label">维修结果：</label>
+                <div class="col-sm-8">
+                    <textarea name="finishDescription" class="form-control" maxlength="500" placeholder="请输入维修结果" rows="3" required></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存</button>&nbsp;
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: select2-js" />
+    <th:block th:include="include :: Labelauty-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "equipment/sercard";
+        var prefixc = ctx + "equipment/serclass";
+        var prefixd = ctx + "system/dept";
+        var prefixa = ctx + "equipment/equarea";
+        var prefixt = ctx + "equipment/serteam";
+        var type;
+        
+        $(function(){
+        	$("#sclassEmergency").select2({
+                minimumResultsForSearch: -1
+            });
+        	$("#scardOrigin").select2({
+                minimumResultsForSearch: -1
+            });
+        });
+        
+        $("#form-sercard-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+            	var data = $('#form-sercard-add').serializeArray();
+            	var staffs = $.form.selectSelects("staffs");
+            	data.push({"name": "staffIds", "value": staffs});
+                $.operate.save(prefix + "/add", data);
+            }
+        }
+
+        layui.use('laydate', function(){
+    		var laydate = layui.laydate;
+        	
+    		laydate.render({ 
+       		    elem: '#repairDate',
+       		    type: 'datetime',
+       		    trigger: 'click'
+       		  }); 
+    		
+    		laydate.render({ 
+       		    elem: '#finishDate',
+       		    type: 'datetime',
+       		    trigger: 'click'
+       		  }); 
+        });
+                         	     
+        function selects(param) {
+        	type = param;
+        	var title, url, tempId, id;
+        	switch (param){
+        		case "sclass" :
+       			{
+       				title = "维修分类选择";
+       				tempId = $("#sclassId").val();
+       				id = $.common.isEmpty(tempId) ? "1" : tempId;
+       				url = prefixc + "/selectSerclassTree/" + id;
+       				break;
+       			}  
+        		case "dept" :
+       			{
+    				title = "报修部门选择";
+    				tempId = $("#deptId").val();
+    				id = $.common.isEmpty(tempId) ? "100" : tempId;
+    				url = prefixd + "/selectDeptTree/" + id;
+    				break;
+       			}
+        		case "area" :
+    			{
+    				title = "报修地址选择";
+    				tempId = $("#areaId").val();
+    				id = $.common.isEmpty(tempId) ? "1" : tempId;
+    				url = prefixa + "/selectEquareaTree/" + id;
+    				break;
+    			}	
+        		case "team" :
+    			{
+    				title = "维修班组选择";
+    				tempId = $("#teamId").val();
+    				id = $.common.isEmpty(tempId) ? "1" : tempId;
+    				url = prefixt + "/selectSerteamTree/" + id;
+    				break;
+    			}
+    			default :
+    				break;
+        	}
+        	
+        	var options = {
+            	title: title,
+            	width: "380",
+            	url: url,
+            	callBack: doSubmit
+            };
+        	$.modal.openOptions(options);
+        }
+        function doSubmit(index, layero){
+            var body = layer.getChildFrame('body', index);
+            $("#" + type +"Id").val(body.find('#treeId').val());
+            if (type == "dept" || type == "team")
+            	$("#" + type +"Name").val(body.find('#treeName').val());
+            else
+            	$("#" + type +"Name").val(body.find('#treeNames').val());
+            if (type == "sclass") {          	
+                $("#sclassEmergency").select2("val", [body.find('#emergency').val()]);
+                $("#teamId").val(body.find('#teamId').val());
+                $("#teamName").val(body.find('#teamName').val());
+                selectStaff();
+            }
+            if(type == "team")
+            	selectStaff();
+            
+            layer.close(index);
+        }
+        
+        function selectStaff(){
+        	var tempId = $("#teamId").val();
+        	var id = $.common.isEmpty(tempId) ? "0" : tempId;
+        	var url = ctx + "equipment/serstaff/selectSerStaffAll/" + id;
+        	$.operate.submitn(url, "get", "json", "", callBack);
+        }        
+        function callBack(result){
+        	var temp = "";
+        	$.each(result, function(key, val){
+        		temp += "<option value='" + val.staffId + "'>" + val.userName + "</option>";
+        	});
+        	$("#staffs option").remove();
+        	$("#staffs").append(temp);
+        }
+    </script>
+</body>
+</html>

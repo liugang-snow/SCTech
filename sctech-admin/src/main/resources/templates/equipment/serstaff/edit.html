@@ -10,11 +10,8 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label is-required">维修人员：</label>
                 <div class="col-sm-8">
-					<div class="input-group">
-                        <input id="uId" name="userId" type="hidden" th:field="*{userId}"/>
-                        <input class="form-control" type="text" onclick="selectUser()" id="uName" readonly required th:field="*{userName}" >
-                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                    </div>
+	                <input id="uId" name="userId" type="hidden" th:field="*{userId}"/>
+	                <input class="form-control" type="text" id="uName" readonly required th:field="*{userName}" >
                 </div>
             </div>
             <div class="form-group">    
@@ -58,24 +55,7 @@
                 $.operate.save(prefix + "/edit", $('#form-serstaff-edit').serialize());
             }
         }
-        
-        /*维修人员-修改-选择维修人员*/
-        function selectUser() {
-            var options = {
-                title: '维修人员选择',
-                width: "800",
-                url: prefixu + "/selectUser",
-                callBack: doSubmitU
-            };
-            $.modal.openOptions(options);
-        }
-        function doSubmitU(index, layero){
-            var body = layer.getChildFrame('body', index);
-               $("#uId").val(body.find('#uId').val());
-               $("#uName").val(body.find('#uName').val());
-               layer.close(index);
-        }
-        
+              
         /*维修人员-修改-选择维修班组树*/
         function selectSerteamTree() {
             var options = {

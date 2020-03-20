@@ -58,4 +58,20 @@ public interface SerTeamMapper
      * @return 结果
      */
     public int deleteSerTeamByIds(String[] teamIds);
+    
+    /**
+     * 更新维修班组状态--停用
+     * 
+     * @param serTeam 维修班组
+     * @return 结果
+     */
+    public int updateStatusD(SerTeam serTeam);
+    
+    /**
+     * 更新设维修班组状态--启用
+     * 
+     * @param serTeam 维修班组
+     * @return 结果
+     */
+    public int updateStatusE(SerTeam serTeam);
 }

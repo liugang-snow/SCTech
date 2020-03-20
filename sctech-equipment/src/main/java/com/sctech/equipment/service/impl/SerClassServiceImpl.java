@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.UUID;
 
 import java.util.ArrayList;
-import com.sctech.common.core.domain.Ztree;
 import com.sctech.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.sctech.equipment.mapper.SerClassMapper;
 import com.sctech.equipment.domain.SerClass;
+import com.sctech.equipment.domain.ZtreeSClass;
 import com.sctech.equipment.service.ISerClassService;
 import com.sctech.common.core.text.Convert;
 
@@ -101,37 +101,47 @@ public class SerClassServiceImpl implements ISerClassService
     }
 
     /**
+     * 更新维修分类状态
+     * 
+     * @param serClass 维修分类
+     * @return 结果
+     */
+    @Override
+    public int updateStatus(SerClass serClass)
+    {
+    	if (serClass.getStatus().equals("1"))
+    		return serClassMapper.updateStatusD(serClass);
+    	else
+    		return serClassMapper.updateStatusE(serClass);
+    }
+    
+    /**
      * 查询维修分类树列表
      * 
      * @return 所有维修分类信息
      */
     @Override
-    public List<Ztree> selectSerClassTree()
+    public List<ZtreeSClass> selectSerClassTree()
     {
         List<SerClass> serClassList = serClassMapper.selectSerClassList(new SerClass());
-        List<Ztree> ztrees = new ArrayList<Ztree>();
+        List<ZtreeSClass> ztrees = new ArrayList<ZtreeSClass>();
         for (SerClass serClass : serClassList)
         {
-            Ztree ztree = new Ztree();
-            ztree.setId(serClass.getSclassId());
-            ztree.setpId(serClass.getParentId());
-            ztree.setName(serClass.getSclassName());
-            ztree.setNames(serClass.getFullname());
-            ztree.setTitle(serClass.getSclassName());
-            ztrees.add(ztree);
+        	if(serClass.getStatus().equals("0"))
+        	{
+	        	ZtreeSClass ztree = new ZtreeSClass();
+	            ztree.setId(serClass.getSclassId());
+	            ztree.setpId(serClass.getParentId());
+	            ztree.setName(serClass.getSclassName());
+	            ztree.setNames(serClass.getFullname());
+	            ztree.setTitle(serClass.getSclassName());
+	            ztree.setEmergency(serClass.getSclassEmergency());
+	            ztree.setTeamId(serClass.getTeamId());
+	            ztree.setTeamName(serClass.getTeamName());
+	            ztrees.add(ztree);
+        	}
         }
         return ztrees;
     }
     
-    /**
-     * 维修分类状态修改
-     * 
-     * @param serClass 维修分类信息
-     * @return 结果
-     */
-    @Override
-    public int changeStatus(SerClass serClass)
-    {
-        return serClassMapper.updateSerClass(serClass);
-    }
 }

@@ -29,7 +29,7 @@ public interface EquClassMapper
      * @return 设备分类集合
      */
     public List<EquClass> selectEquClassList(EquClass equClass);
-
+   
     /**
      * 新增设备分类
      * 
@@ -61,6 +61,22 @@ public interface EquClassMapper
      * @return 结果
      */
     public int deleteEquClassByIds(String[] classIds);
+    
+    /**
+     * 更新设备分类状态--停用
+     * 
+     * @param equClass 设备分类
+     * @return 结果
+     */
+    public int updateStatusD(EquClass equClass);
+    
+    /**
+     * 更新设备分类状态--启用
+     * 
+     * @param equClass 设备分类
+     * @return 结果
+     */
+    public int updateStatusE(EquClass equClass);
     
     /**
      * 校验设备分类名称是否唯一

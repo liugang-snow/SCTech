@@ -62,6 +62,14 @@ public interface IEquClassService
     public int deleteEquClassById(Long classId);
 
     /**
+     * 更新设备分类状态
+     * 
+     * @param equClass 设备分类
+     * @return 结果
+     */
+    public int updateStatus(EquClass equClass);
+    
+    /**
      * 查询设备分类树列表
      * 
      * @return 所有设备分类信息
@@ -76,11 +84,4 @@ public interface IEquClassService
      */
     public boolean checkClassNameUnique(EquClass equClass);
     
-    /**
-     * 设备分类状态修改
-     * 
-     * @param equclass 设备分类信息
-     * @return 结果
-     */
-    public int changeStatus(EquClass equclass);
 }

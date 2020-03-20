@@ -176,10 +176,10 @@ public class SerTeamController extends BaseController
      */
     @Log(title = "维修班组管理", businessType = BusinessType.UPDATE)
     @RequiresPermissions("equipment:serteam:edit")
-    @PostMapping("/changeStatus")
+    @PostMapping("/updateStatus")
     @ResponseBody
-    public AjaxResult changeStatus(SerTeam serTeam)
+    public AjaxResult updateStatus(SerTeam serTeam)
     {
-        return toAjax(serTeamService.changeStatus(serTeam));
+        return toAjax(serTeamService.updateStatus(serTeam));
     }
 }
