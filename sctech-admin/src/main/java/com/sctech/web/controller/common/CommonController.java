@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.sctech.common.config.Global;
 import com.sctech.common.config.ServerConfig;
-import com.sctech.common.constant.Constants;
 import com.sctech.common.core.domain.AjaxResult;
 import com.sctech.common.utils.StringUtils;
 import com.sctech.common.utils.file.FileUploadUtils;
@@ -83,31 +82,12 @@ public class CommonController
             AjaxResult ajax = AjaxResult.success();
             ajax.put("fileName", fileName);
             ajax.put("url", url);
+                      
             return ajax;
         }
         catch (Exception e)
         {
             return AjaxResult.error(e.getMessage());
         }
-    }
-
-    /**
-     * 本地资源通用下载
-     */
-    @GetMapping("/common/download/resource")
-    public void resourceDownload(String resource, HttpServletRequest request, HttpServletResponse response)
-            throws Exception
-    {
-        // 本地资源路径
-        String localPath = Global.getProfile();
-        // 数据库资源地址
-        String downloadPath = localPath + StringUtils.substringAfter(resource, Constants.RESOURCE_PREFIX);
-        // 下载名称
-        String downloadName = StringUtils.substringAfterLast(downloadPath, "/");
-        response.setCharacterEncoding("utf-8");
-        response.setContentType("multipart/form-data");
-        response.setHeader("Content-Disposition",
-                "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, downloadName));
-        FileUtils.writeBytes(downloadPath, response.getOutputStream());
     }
 }

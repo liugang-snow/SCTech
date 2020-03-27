@@ -1,0 +1,24 @@
+.div-xm-select-search{
+    vertical-align: top;
+    display: inline-block;
+    width: 200px;
+    height: 36px;   
+}
+
+.div-xm-select-edit{
+    vertical-align: top;
+    display: inline-block;
+    width: 100%;   
+}
+
+.select-list li p {
+    margin: 9px 5px 9px 0px;
+}
+
+.select-list li input {
+    height: 36px;
+}
+
+.select-list li select {
+    height: 36px;
+}

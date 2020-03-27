@@ -3,6 +3,8 @@ package com.sctech.web.controller.equipment;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -51,6 +53,34 @@ public class SerCardController extends BaseController
     }
 
     /**
+     * 工单查询
+     */
+    @GetMapping("/search")
+    public String search()
+    {
+        return prefix + "/search";
+    }
+    
+    /**
+     * 工单查询-查看
+     */
+    @GetMapping("/searchView/{scardId}")
+    public String searchView(@PathVariable("scardId") Long scardId, ModelMap mmap)
+    {    
+        SerCard serCard = serCardService.selectSerCardById(scardId);
+        List<SerStaff> serStaffs = serStaffService.selectSerStaffs(scardId);
+        String serStaffsName = "";
+        for (SerStaff serStaff : serStaffs)
+        {
+        	serStaffsName += serStaff.getUserName() + "、";
+        }
+        
+        mmap.put("serCard", serCard);
+        mmap.put("serStaffsName", serStaffsName.substring(0, serStaffsName.length() - 1 ));
+        return prefix + "/searchView";
+    }
+    
+    /**
      * 查询维修工单列表
      */
     @RequiresPermissions("equipment:sercard:list")
@@ -85,6 +115,8 @@ public class SerCardController extends BaseController
     {
     	SerCard serCard = new SerCard();
     	
+    	//生成guid
+		serCard.setScardGuid(UUID.randomUUID().toString().replace("-",""));
     	//获取当前时间
      	Date now = DateUtils.getNowDate();
      	String code = "WXD" + new SimpleDateFormat("yyyyMMddHHmmssSSS").format(now);
@@ -146,6 +178,37 @@ public class SerCardController extends BaseController
     }
     
     /**
+     * 受理指派
+     */
+    @GetMapping("/receive/{scardId}")
+    public String receive(@PathVariable("scardId") Long scardId, ModelMap mmap)
+    {
+        SerCard serCard = serCardService.selectSerCardById(scardId);        
+        mmap.put("serCard", serCard);
+        return prefix + "/receive";
+    }  
+    
+    /**
+     * 维修
+     */
+    @GetMapping("/repair/{scardId}")
+    public String repair(@PathVariable("scardId") Long scardId, ModelMap mmap)
+    {
+    	SerCard serCard = serCardService.selectSerCardById(scardId);
+    	List<SerStaff> serStaffs = serStaffService.selectSerStaffs(scardId);
+        String serStaffsName = "";
+        for (SerStaff serStaff : serStaffs)
+        {
+        	serStaffsName += serStaff.getUserName() + "、";
+        }
+        
+        mmap.put("serCard", serCard);
+        mmap.put("serStaffsName", serStaffsName.substring(0, serStaffsName.length() - 1 ));
+        return prefix + "/repair";
+    }  
+    
+    
+    /**
      * 维修评价
      */
     @GetMapping("/evaluation/{scardId}")
@@ -162,6 +225,5 @@ public class SerCardController extends BaseController
         mmap.put("serCard", serCard);
         mmap.put("serStaffsName", serStaffsName.substring(0, serStaffsName.length() - 1 ));
         return prefix + "/evaluation";
-    }
-    
+    }   
 }

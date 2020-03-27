@@ -19,6 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="repairDescription"    column="repair_description"    />
         <result property="teamId"    column="team_id"    />
         <result property="staffIds"    column="staff_ids"    />
+        <result property="requireDate"    column="require_date"    />
         <result property="finishDate"    column="finish_date"    />
         <result property="finishDescription"    column="finish_description"    />
         <result property="serEvaluation"    column="ser_evaluation"    />
@@ -47,7 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             	and scard_code like concat('%', #{scardCode}, '%')
             </if>
             <if test="sclassId != null "> 
-            	and s.sclass_id = #{sclassId}
+            	and (s.sclass_id = #{sclassId} or s.sclass_id in ( select sclass_id from ser_class where find_in_set (#{sclassId},ancestors) ))
             </if>
             <if test="sclassEmergency != null  and sclassEmergency != ''"> 
             	and s.sclass_emergency = #{sclassEmergency}
@@ -55,8 +56,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="repairContacts != null  and repairContacts != ''"> 
             	and s.repair_contacts like concat('%', #{repairContacts}, '%')
            	</if>
+           	<if test="repairPhone != null  and repairPhone != ''"> 
+            	and s.repair_phone like concat('%', #{repairPhone}, '%')
+           	</if>
+           	<if test="scardOrigin != null  and scardOrigin != ''"> 
+            	and s.scard_origin = #{scardOrigin}
+           	</if>
+           	<if test="deptId != null  and deptId != ''"> 
+            	and (s.dept_id = #{deptId} or s.dept_id in ( select dept_id from sys_dept where find_in_set (#{deptId},ancestors) ))
+           	</if>
             <if test="areaId != null "> 
-            	and s.area_id = #{areaId}
+            	and (s.area_id = #{areaId} or s.area_id in ( select area_id from equ_area where find_in_set (#{areaId},ancestors) ))
             </if>
             <if test="params.beginRepairDate != null and params.beginRepairDate != ''"><!-- 开始时间检索 -->
 				and date_format(s.repair_date,'%y%m%d') &gt;= date_format(#{params.beginRepairDate},'%y%m%d')
@@ -64,6 +74,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="params.endRepairDate != null and params.endRepairDate != ''"><!-- 结束时间检索 -->
 				and date_format(s.repair_date,'%y%m%d') &lt;= date_format(#{params.endRepairDate},'%y%m%d')
 			</if>
+			<if test="repairDescription != null  and repairDescription != ''"> 
+            	and s.repai_description like concat('%', #{repairDescription}, '%')
+           	</if>
+           	<if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+				and date_format(s.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+			</if>
+			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+				and date_format(s.create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+			</if>
+			<if test="createBy != null  and createBy != ''"> 
+            	and s.create_by like concat('%', #{createBy}, '%')
+            </if>
             and s.del_flag = '0'
         	order by s.create_time desc
         </where>
@@ -90,6 +112,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="repairDescription != null  and repairDescription != ''">repair_description,</if>
             <if test="teamId != null ">team_id,</if>
             <if test="staffIds != null  and staffIds != ''">staff_ids,</if>
+            <if test="requireDate != null ">require_date,</if>
             <if test="finishDate != null ">finish_date,</if>
             <if test="finishDescription != null  and finishDescription != ''">finish_description,</if>
             <if test="serEvaluation != null  and serEvaluation != ''">ser_evaluation,</if>
@@ -116,6 +139,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="repairDescription != null  and repairDescription != ''">#{repairDescription},</if>
             <if test="teamId != null ">#{teamId},</if>
             <if test="staffIds != null  and staffIds != ''">#{staffIds},</if>
+            <if test="requireDate != null ">#{requireDate},</if>
             <if test="finishDate != null ">#{finishDate},</if>
             <if test="finishDescription != null  and finishDescription != ''">#{finishDescription},</if>
             <if test="serEvaluation != null  and serEvaluation != ''">#{serEvaluation},</if>
@@ -146,6 +170,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="repairDescription != null  and repairDescription != ''">repair_description = #{repairDescription},</if>
             <if test="teamId != null ">team_id = #{teamId},</if>
             <if test="staffIds != null  and staffIds != ''">staff_ids = #{staffIds},</if>
+            <if test="requireDate != null ">require_date = #{requireDate},</if>
             <if test="finishDate != null ">finish_date = #{finishDate},</if>
             <if test="finishDescription != null  and finishDescription != ''">finish_description = #{finishDescription},</if>
             <if test="serEvaluation != null  and serEvaluation != ''">ser_evaluation = #{serEvaluation},</if>

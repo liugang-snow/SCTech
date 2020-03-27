@@ -2,6 +2,7 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('设备档案查询')" />
+    <th:block th:include="include :: xmSelect-css" />
 </head>
 <body class="gray-bg">
     <div class="container-div">
@@ -18,23 +19,63 @@
                                 <p>设备名称：</p>
                                 <input type="text" name="equName"/>
                             </li>
+                            <li>
+                                <p>设备分类：</p>
+                                <div id="classId" class="div-xm-select-search"></div>
+                            </li>
+                            <li class="select-time">
+                                <p>数量：</p>
+                                <input type="text" id="beginCount" name="params[beginCount]"/>
+                                <span>-</span>
+                                <input type="text" id="endCount" name="params[endCount]"/>
+                            </li>
+                            <li class="select-time">
+                                <p>单价(元)：</p>
+                                <input type="text" id="beginSprice" name="params[beginSprice]"/>
+                                <span>-</span>
+                                <input type="text" id="endSprice" name="params[endSprice]"/>
+                            </li>
                             <li class="select-time">
                                 <p>总价(元)：</p>
                                 <input type="text" id="beginPrice" name="params[beginPrice]"/>
                                 <span>-</span>
                                 <input type="text" id="endPrice" name="params[endPrice]"/>
-                            </li>
+                            </li>                           
                             <li>
-                                <p>所属部门：</p>
-                                <input type="text" name="deptName"/>
+                                <p>所属合同：</p>
+                                <input type="text" name="contractName"/>
                             </li>
                             <li>
                                 <p>供应商：</p>
                                 <input type="text" name="supplierName"/>
+                            </li>                            
+                            <li>
+                                <p>品牌：</p>
+                                <input type="text" name="equBrand"/>
                             </li>
                             <li>
-                                <p>所属合同：</p>
-                                <input type="text" name="contractName"/>
+                                <p>规格型号：</p>
+                                <input type="text" name="equParam"/>
+                            </li>
+                            <li>
+                                <p>所属部门：</p>
+                                 <div id="deptId" class="div-xm-select-search"></div>
+                            </li>
+                            <li>
+                                <p>管理员：</p>
+                                <input type="text" name="equAdmin"/>
+                            </li>
+                            <li class="select-time">
+                                <p>采购时间：</p>
+                                <input type="text" class="time-input" id="beginEquTime" placeholder="开始时间" name="params[beginEquTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endEquTime" placeholder="结束时间" name="params[endEquTime]"/>
+                            </li>
+                            <li class="select-time">
+                                <p>使用年限：</p>
+                                <input type="text" id="startYear" name="params[startYear]"/>
+                                <span>-</span>
+                                <input type="text" id="endYear" name="params[endYear]"/>
                             </li>
                             <li>
                                 <p>使用状态：</p>
@@ -43,9 +84,13 @@
                                     <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
                                 </select>
                             </li>
+                            <li>
+                                <p>所在区域：</p>
+                                <div id="areaId" class="div-xm-select-search"></div>
+                            </li>
                             <li class="select-time">
                                 <p>创建时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+                                <input type="text" class="time-input" id="beginTime" placeholder="开始时间" name="params[beginTime]"/>
                                 <span>-</span>
                                 <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
                             </li>
@@ -55,14 +100,14 @@
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="refresh()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
                         </ul>
                     </div>
                 </form>
             </div>
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="equipment:equcard:export">
+                <a class="btn btn-warning" onclick="$.table.exportExcel()">
                     <i class="fa fa-download"></i> 导出
                  </a>
             </div>
@@ -72,10 +117,12 @@
         </div>
     </div>
     <th:block th:include="include :: footer" />
+    <th:block th:include="include :: xmSelect-js" />
     <script th:inline="javascript">
         var equStatusDatas = [[${@dict.getType('equ_status_type')}]];
         var prefix = ctx + "equipment/equcard";
-
+        var cclass, dept, arae;
+        
         $(function() {
             var options = {
                 url: prefix + "/list",
@@ -87,12 +134,22 @@
                     visible: false
                 },
                 {
+                    title : '序号',
+                    formatter: function (value, row, index) {
+                		return $.table.serialNumber(index);
+                	}
+                },
+                {
                     field : 'equSerial', 
                     title : '流水号'
                 },
                 {
                     field : 'equName', 
                     title : '设备名称'
+                },
+                {
+                    field : 'className', 
+                    title : '设备分类'
                 },
                 {
                     field : 'equCount', 
@@ -107,16 +164,38 @@
                     title : '总价(元)'
                 },
                 {
-                    field : 'deptName', 
-                    title : '所属部门'
+                    field : 'contractName', 
+                    title : '所属合同'
                 },
                 {
                     field : 'supplierName', 
                     title : '供应商'
                 },
                 {
-                    field : 'contractName', 
-                    title : '所属合同'
+                    field : 'equBrand', 
+                    title : '品牌',
+	                formatter:$.commons.tooltip20
+                },
+                {
+                    field : 'equParam', 
+                    title : '规格型号',
+	                formatter:$.commons.tooltip20
+                },
+                {
+                    field : 'deptName', 
+                    title : '所属部门'
+                },
+                {
+                    field : 'equAdmin', 
+                    title : '设备管理员'
+                },
+                {
+                    field : 'equTime', 
+                    title : '设备采购时间'
+                },
+                {
+                    field : 'equYear', 
+                    title : '设备使用年限'
                 },
                 {
                     field : 'equStatus', 
@@ -124,6 +203,10 @@
                     formatter: function(value, row, index) {
                        return $.table.selectDictLabel(equStatusDatas, value);
                     }
+                },
+                {
+                    field : 'areaName', 
+                    title : '所在区域'
                 },
                 {
                     field : 'createTime', 
@@ -144,6 +227,10 @@
                 }]
             };
             $.table.init(options);
+            
+            cclass = $.xmselect.initSearchTree("classId", ctx + "equipment/equclass/treeData");   
+	        dept = $.xmselect.initSearchTree("deptId", ctx + "system/dept/treeData");
+	        area = $.xmselect.initSearchTree("areaId", ctx + "equipment/equarea/treeData");
         });
         
 		/* 设备查询-查看 */
@@ -151,6 +238,14 @@
 		    var url = prefix + '/searchView/' + equId;
 		    $.modal.openTab("设备查看", url);
 		}
+		
+		//清空函数重写
+	    function refresh(){
+	    	cclass.setValue([ ]);
+	    	dept.setValue([ ]);
+	    	area.setValue([ ]);
+	    	$.form.reset();
+	    }
     </script>
 </body>
 </html>

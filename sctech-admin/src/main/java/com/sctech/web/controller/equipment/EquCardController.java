@@ -67,9 +67,8 @@ public class EquCardController extends BaseController
     /**
      * 设备查询
      */
-    @RequiresPermissions("equipment:equcard:search")
     @GetMapping("/search")
-    public String equcardsearch()
+    public String search()
     {
         return prefix + "/search";
     }
@@ -77,7 +76,6 @@ public class EquCardController extends BaseController
     /**
      * 设备查询-查看
      */
-    @RequiresPermissions("equipment:equcard:search")
     @GetMapping("/searchView/{equId}")
     public String searchView(@PathVariable("equId") Long equId, ModelMap mmap)
     {    
@@ -119,8 +117,10 @@ public class EquCardController extends BaseController
      * 新增设备档案
      */
     @GetMapping("/add")
-    public String add()
+    public String add(ModelMap mmap)
     {
+    	String equGuid = UUID.randomUUID().toString().replace("-", "");
+    	mmap.put("equGuid", equGuid);
         return prefix + "/add";
     }
 
@@ -133,7 +133,6 @@ public class EquCardController extends BaseController
     @ResponseBody
     public AjaxResult addSave(EquCard equCard)
     {
-    	equCard.setEquGuid(UUID.randomUUID().toString().replace("-", ""));
     	equCard.setEquSerial(equCardService.getSerialNumCard());
     	equCard.setCreateBy(ShiroUtils.getLoginName());
     	equCard.setEquPrice(equCard.getEquCount() * equCard.getEquSprice());

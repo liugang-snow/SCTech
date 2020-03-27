@@ -1720,6 +1720,12 @@
               "chnname": "维修人员"
             },
             {
+              "name": "require_date",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "要求完成时间"
+            },
+            {
               "name": "finish_date",
               "type": "DateTime",
               "remark": "",
@@ -1990,6 +1996,119 @@
           ],
           "chnname": "维修花费表",
           "remark": "维修工单子表"
+        },
+        {
+          "title": "common_upload",
+          "fields": [
+            {
+              "name": "id",
+              "type": "BigInt",
+              "remark": "主键",
+              "chnname": "ID",
+              "pk": true,
+              "notNull": true,
+              "autoIncrement": true
+            },
+            {
+              "name": "guid",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "Guid",
+              "notNull": true,
+              "defaultValue": ""
+            },
+            {
+              "name": "remark",
+              "type": "Intro",
+              "remark": "",
+              "chnname": "备注"
+            },
+            {
+              "name": "del_flag",
+              "type": "Char",
+              "remark": "（0代表存在 2代表删除）",
+              "chnname": "删除状态",
+              "notNull": false,
+              "defaultValue": "0"
+            },
+            {
+              "name": "create_by",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "创建人",
+              "notNull": false
+            },
+            {
+              "name": "create_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间",
+              "notNull": false
+            },
+            {
+              "name": "update_by",
+              "type": "IdOrKey",
+              "remark": "",
+              "chnname": "更新人",
+              "notNull": false
+            },
+            {
+              "name": "update_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间",
+              "notNull": false
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "附件数据表",
+          "remark": "附件数据表"
         }
       ],
       "graphCanvas": {

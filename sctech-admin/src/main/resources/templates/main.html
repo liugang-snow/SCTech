@@ -3,334 +3,108 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>统计</title>
-    <link rel="shortcut icon" href="favicon.ico">
-    <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <title>首页</title>
+	<link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
     <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
     <link href="../static/css/main/animate.min.css" th:href="@{/css/main/animate.min.css}" rel="stylesheet"/>
-    <link href="../static/css/main/style.min862f.css" th:href="@{/css/main/style.min862f.css}" rel="stylesheet"/>
+    <link th:href="@{/css/style.css}" rel="stylesheet"/>
+    <style type="text/css">
+    h2 {
+    	color: #1C84C6;
+    }
+    .vertical-timeline-content p {
+	    margin: 0.4em 0;
+	    line-height: 1.6;
+	}
+    small {
+    	color: #23C6C8;
+    	font-size: 85%;
+    }
+    .font-danger{
+    	color: #ED5565;
+    }
+	</style>
 </head>
-
 <body class="gray-bg">
-    <div class="wrapper wrapper-content">
-
-        <div class="row">
-            <div class="col-sm-3">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <span class="label label-success pull-right">年</span>
-                        <h5>设备</h5>
-                    </div>
-                    <div class="ibox-content">
-                        <h1 class="no-margins">340,90</h1>
-                        <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i>
-                        </div>
-                        <small>总数</small>
-                    </div>
-                </div>
+    <div class="row animated fadeInRight">
+        <div class="ibox float-e-margins">
+            <div class="text-center float-e-margins p-md">
+                <span>开发时间线</span>
             </div>
-            <div class="col-sm-3">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <span class="label label-info pull-right">月</span>
-                        <h5>报修</h5>
+            <div id="ibox-content">
+                 <div id="vertical-timeline" class="vertical-container light-timeline">
+                 	<div class="vertical-timeline-block">
+                         <div class="vertical-timeline-icon navy-bg">
+                             <i class="fa fa-calendar-minus-o"></i>
+                         </div>
+                         <div class="vertical-timeline-content">
+                         	<h2>2020-03-23至2020-03-27</h2>
+							<p>1.整合了layui的上传组件</p>
+							<small>&nbsp;&nbsp;&nbsp;&nbsp;a.实现了上传，尚未实现与数据库交互</small><br>
+							<p>2.整合了xmSelect下拉组件</p>
+							<small>&nbsp;&nbsp;&nbsp;&nbsp;a.在“维修工单”的查询项“维修分类”、“报修地址”实现了下拉树型的单选</small><br>
+							<small>&nbsp;&nbsp;&nbsp;&nbsp;b.在“维修人员”的“添加”、“修改”的“维修班组”实现了下拉树型的单选</small><br>
+							<small>&nbsp;&nbsp;&nbsp;&nbsp;c.在“受理指派”的“维修人员”实现了下拉树的多选</small><br>
+							<small>&nbsp;&nbsp;&nbsp;&nbsp;d.在“受理指派”的“维修班组”、“维修人员”实现了下拉数的联动</small><br>
+							<p>3.优化了“维修管理”模块</p>
+							<small>&nbsp;&nbsp;&nbsp;&nbsp;a.针对“维修工单”进行“受理指派”、“维修”</small><br>
+							<small>&nbsp;&nbsp;&nbsp;&nbsp;b.将“维修花费”改为“维修清单”；<font class="font-danger">维修清单的"备品备件"待日后补完</font></small><br>
+							<small>&nbsp;&nbsp;&nbsp;&nbsp;c.添加了“工单查询”功能</small><br>
+							<small>&nbsp;&nbsp;&nbsp;&nbsp;d.添加了“工单查看”功能</small><br>
+							<p>3.优化了“设备管理”模块</p>
+							<small>&nbsp;&nbsp;&nbsp;&nbsp;a.增加了“设备查询”的查询项</small><br>
+							<p>4.修复了部分Bug、进行了系统优化</p>
+							<p>5.将首页变为开发时间线</p>
+                         </div>
                     </div>
-                    <div class="ibox-content">
-                        <h1 class="no-margins">76</h1>
-                        <div class="stat-percent font-bold text-info">10% <i class="fa fa-level-up"></i>
-                        </div>
-                        <small>本月报修数</small>
+                 	<div class="vertical-timeline-block">
+                         <div class="vertical-timeline-icon navy-bg">
+                             <i class="fa fa-calendar-minus-o"></i>
+                         </div>
+                         <div class="vertical-timeline-content">
+                         	<h2>2020-03-16至2020-03-20</h2>
+                         	<p>1.优化了“维修管理”模块</p>
+							<small>&nbsp;&nbsp;&nbsp;&nbsp;a.添加了“维修工单”功能：添加、修改、删除</small><br>
+							<small>&nbsp;&nbsp;&nbsp;&nbsp;b.针对“维修工单”进行“维修花费”、“维修评价”</small><br>
+							<p>3.优化了系统部分功能：</p>
+							<small>&nbsp;&nbsp;&nbsp;&nbsp;a.状态的启用、禁用对上下级的影响</small><br>
+							<small>&nbsp;&nbsp;&nbsp;&nbsp;b.维修班组的组长只可以指定一个人</small><br>
+							<small>&nbsp;&nbsp;&nbsp;&nbsp;c.维修人员在同一班组下不可重复选区</small><br>
+							<p>4.修改了系统的部分Bug:</p>
+							<small>&nbsp;&nbsp;&nbsp;&nbsp;d.批量删除功能失效</small>
+                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <span class="label label-primary pull-right">今天</span>
-                        <h5>保养</h5>
-                    </div>
-                    <div class="ibox-content">
-                        <h1 class="no-margins">10</h1>
-                        <div class="stat-percent font-bold text-navy">90% <i class="fa fa-level-up"></i>
-                        </div>
-                        <small>今日保养数</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <span class="label label-danger pull-right">月</span>
-                        <h5>巡检</h5>
-                    </div>
-                    <div class="ibox-content">
-                        <h1 class="no-margins">50</h1>
-                        <div class="stat-percent font-bold text-danger">38% <i class="fa fa-level-down"></i>
-                        </div>
-                        <small>2月巡检数</small>
-                    </div>
-                </div>
-            </div>
+                 	<div class="vertical-timeline-block">
+                         <div class="vertical-timeline-icon navy-bg">
+                             <i class="fa fa-calendar-minus-o"></i>
+                         </div>
+                         <div class="vertical-timeline-content">
+                         	<h2>2020-03-03至03-13</h2>
+							<p>1.基于设备管理系统Demo版修改了代码的底层结构</p>
+							<small>&nbsp;&nbsp;&nbsp;&nbsp;a.更换项目包路径为SCTech</small>	
+							<small>&nbsp;&nbsp;&nbsp;&nbsp;b.将业务模块单独放置</small>
+							<p>2.优化了“设备管理”模块</p>
+							<small>&nbsp;&nbsp;&nbsp;&nbsp;a.添加了“设备所在区域”功能:添加、修改、删除</small><br>
+							<small>&nbsp;&nbsp;&nbsp;&nbsp;b.添加了“设备位号管理”功能:添加、修改、删除</small><br>
+							<p>3.添加了“维修管理”模块</p>
+							<small>&nbsp;&nbsp;&nbsp;&nbsp;a.添加了“维修班组”功能:添加、修改、删除</small><br>
+							<small>&nbsp;&nbsp;&nbsp;&nbsp;b.添加了“维修人员”功能:添加、修改、删除</small><br>
+							<small>&nbsp;&nbsp;&nbsp;&nbsp;c.添加了“维修分类”功能:添加、修改、删除</small>
+                         </div>
+                     </div>
+                     <div class="vertical-timeline-block">
+                         <div class="vertical-timeline-icon navy-bg">
+                             <i class="fa fa-calendar-minus-o"></i>
+                         </div>
+                         <div class="vertical-timeline-content">
+                         	<h2>2020-03-03前</h2>
+							<p>1.完成了设备管理系统Demo版的开发</p>
+                         </div>
+                     </div>
+                 </div>
+             </div>
         </div>
-        
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5>订单</h5>
-                        <div class="pull-right">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-xs btn-white active">天</button>
-                                <button type="button" class="btn btn-xs btn-white">月</button>
-                                <button type="button" class="btn btn-xs btn-white">年</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ibox-content">
-                        <div class="row">
-                            <div class="col-sm-9">
-                                <div class="flot-chart">
-                                    <div class="flot-chart-content" id="flot-dashboard-chart"></div>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <ul class="stat-list">
-                                    <li>
-                                        <h2 class="no-margins">2,346</h2>
-                                        <small>订单总数</small>
-                                        <div class="stat-percent">48% <i class="fa fa-level-up text-navy"></i>
-                                        </div>
-                                        <div class="progress progress-mini">
-                                            <div style="width: 48%;" class="progress-bar"></div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <h2 class="no-margins ">4,422</h2>
-                                        <small>最近一个月订单</small>
-                                        <div class="stat-percent">60% <i class="fa fa-level-down text-navy"></i>
-                                        </div>
-                                        <div class="progress progress-mini">
-                                            <div style="width: 60%;" class="progress-bar"></div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <h2 class="no-margins ">9,180</h2>
-                                        <small>最近一个月销售额</small>
-                                        <div class="stat-percent">22% <i class="fa fa-bolt text-navy"></i>
-                                        </div>
-                                        <div class="progress progress-mini">
-                                            <div style="width: 22%;" class="progress-bar"></div>
-                                        </div>
-                                    </li>
-                                 </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5>用户项目列表</h5>
-                        <div class="ibox-tools">
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
-                            <a class="close-link">
-                                <i class="fa fa-times"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="ibox-content">
-                        <table class="table table-hover no-margins">
-                            <thead>
-                                <tr>
-                                    <th>状态</th>
-                                    <th>日期</th>
-                                    <th>用户</th>
-                                    <th>值</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><small>进行中...</small>
-                                    </td>
-                                    <td><i class="fa fa-clock-o"></i> 11:20</td>
-                                    <td>青衣5858</td>
-                                    <td class="text-navy"> <i class="fa fa-level-up"></i> 24%</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="label label-warning">已取消</span>
-                                    </td>
-                                    <td><i class="fa fa-clock-o"></i> 10:40</td>
-                                    <td>徐子崴</td>
-                                    <td class="text-navy"> <i class="fa fa-level-up"></i> 66%</td>
-                                </tr>
-                                <tr>
-                                    <td><small>进行中...</small>
-                                    </td>
-                                    <td><i class="fa fa-clock-o"></i> 01:30</td>
-                                    <td>姜岚昕</td>
-                                    <td class="text-navy"> <i class="fa fa-level-up"></i> 54%</td>
-                                </tr>
-                                <tr>
-                                    <td><small>进行中...</small>
-                                    </td>
-                                    <td><i class="fa fa-clock-o"></i> 02:20</td>
-                                    <td>武汉大兵哥</td>
-                                    <td class="text-navy"> <i class="fa fa-level-up"></i> 12%</td>
-                                </tr>
-                                <tr>
-                                    <td><small>进行中...</small>
-                                    </td>
-                                    <td><i class="fa fa-clock-o"></i> 09:40</td>
-                                    <td>荆莹儿</td>
-                                    <td class="text-navy"> <i class="fa fa-level-up"></i> 22%</td>
-                                </tr>
-                                <tr>
-                                    <td><span class="label label-primary">已完成</span>
-                                    </td>
-                                    <td><i class="fa fa-clock-o"></i> 04:10</td>
-                                    <td>栾某某</td>
-                                    <td class="text-navy"> <i class="fa fa-level-up"></i> 66%</td>
-                                </tr>
-                                <tr>
-                                    <td><small>进行中...</small>
-                                    </td>
-                                    <td><i class="fa fa-clock-o"></i> 12:08</td>
-                                    <td>范范范二妮</td>
-                                    <td class="text-navy"> <i class="fa fa-level-up"></i> 23%</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-         </div>
-      </div>
     </div>
-    <script th:src="@{/js/jquery.min.js}"></script>
-    <script th:src="@{/js/bootstrap.min.js}"></script>
-    <script th:src="@{/ajax/libs/flot/jquery.flot.js}"></script>
-    
-    <th:block th:include="include :: sparkline-js" />
-    <script type="text/javascript">
-	    $(document).ready(function () {
-	        var data2 = [
-	            [gd(2012, 1, 1), 7], [gd(2012, 1, 2), 6], [gd(2012, 1, 3), 4], [gd(2012, 1, 4), 8],
-	            [gd(2012, 1, 5), 9], [gd(2012, 1, 6), 7], [gd(2012, 1, 7), 5], [gd(2012, 1, 8), 4],
-	            [gd(2012, 1, 9), 7], [gd(2012, 1, 10), 8], [gd(2012, 1, 11), 9], [gd(2012, 1, 12), 6],
-	            [gd(2012, 1, 13), 4], [gd(2012, 1, 14), 5], [gd(2012, 1, 15), 11], [gd(2012, 1, 16), 8],
-	            [gd(2012, 1, 17), 8], [gd(2012, 1, 18), 11], [gd(2012, 1, 19), 11], [gd(2012, 1, 20), 6],
-	            [gd(2012, 1, 21), 6], [gd(2012, 1, 22), 8], [gd(2012, 1, 23), 11], [gd(2012, 1, 24), 13],
-	            [gd(2012, 1, 25), 7], [gd(2012, 1, 26), 9], [gd(2012, 1, 27), 9], [gd(2012, 1, 28), 8],
-	            [gd(2012, 1, 29), 5], [gd(2012, 1, 30), 8], [gd(2012, 1, 31), 25]
-	        ];
-	
-	        var data3 = [
-	            [gd(2012, 1, 1), 800], [gd(2012, 1, 2), 500], [gd(2012, 1, 3), 600], [gd(2012, 1, 4), 700],
-	            [gd(2012, 1, 5), 500], [gd(2012, 1, 6), 456], [gd(2012, 1, 7), 800], [gd(2012, 1, 8), 589],
-	            [gd(2012, 1, 9), 467], [gd(2012, 1, 10), 876], [gd(2012, 1, 11), 689], [gd(2012, 1, 12), 700],
-	            [gd(2012, 1, 13), 500], [gd(2012, 1, 14), 600], [gd(2012, 1, 15), 700], [gd(2012, 1, 16), 786],
-	            [gd(2012, 1, 17), 345], [gd(2012, 1, 18), 888], [gd(2012, 1, 19), 888], [gd(2012, 1, 20), 888],
-	            [gd(2012, 1, 21), 987], [gd(2012, 1, 22), 444], [gd(2012, 1, 23), 999], [gd(2012, 1, 24), 567],
-	            [gd(2012, 1, 25), 786], [gd(2012, 1, 26), 666], [gd(2012, 1, 27), 888], [gd(2012, 1, 28), 900],
-	            [gd(2012, 1, 29), 178], [gd(2012, 1, 30), 555], [gd(2012, 1, 31), 993]
-	        ];
-	
-	
-	        var dataset = [
-	            {
-	                label: "订单数",
-	                data: data3,
-	                color: "#1ab394",
-	                bars: {
-	                    show: true,
-	                    align: "center",
-	                    barWidth: 24 * 60 * 60 * 600,
-	                    lineWidth: 0
-	                }
-	
-	            }, {
-	                label: "付款数",
-	                data: data2,
-	                yaxis: 2,
-	                color: "#464f88",
-	                lines: {
-	                    lineWidth: 1,
-	                    show: true,
-	                    fill: true,
-	                    fillColor: {
-	                        colors: [{
-	                            opacity: 0.2
-	                        }, {
-	                            opacity: 0.2
-	                        }]
-	                    }
-	                },
-	                splines: {
-	                    show: false,
-	                    tension: 0.6,
-	                    lineWidth: 1,
-	                    fill: 0.1
-	                },
-	            }
-	        ];
-	
-	
-	        var options = {
-	            xaxis: {
-	                mode: "time",
-	                tickSize: [3, "day"],
-	                tickLength: 0,
-	                axisLabel: "Date",
-	                axisLabelUseCanvas: true,
-	                axisLabelFontSizePixels: 12,
-	                axisLabelFontFamily: 'Arial',
-	                axisLabelPadding: 10,
-	                color: "#838383"
-	            },
-	            yaxes: [{
-	                    position: "left",
-	                    max: 1070,
-	                    color: "#838383",
-	                    axisLabelUseCanvas: true,
-	                    axisLabelFontSizePixels: 12,
-	                    axisLabelFontFamily: 'Arial',
-	                    axisLabelPadding: 3
-	            }, {
-	                    position: "right",
-	                    clolor: "#838383",
-	                    axisLabelUseCanvas: true,
-	                    axisLabelFontSizePixels: 12,
-	                    axisLabelFontFamily: ' Arial',
-	                    axisLabelPadding: 67
-	            }
-	            ],
-	            legend: {
-	                noColumns: 1,
-	                labelBoxBorderColor: "#000000",
-	                position: "nw"
-	            },
-	            grid: {
-	                hoverable: false,
-	                borderWidth: 0,
-	                color: '#838383'
-	            }
-	        };
-	
-	        function gd(year, month, day) {
-	            return new Date(year, month - 1, day).getTime();
-	        }
-	
-	        var previousPoint = null,
-	            previousLabel = null;
-	
-	        $.plot($("#flot-dashboard-chart"), dataset, options);
-	    });
-    </script>
+    <th:block th:include="include :: footer" />
 </body>
 </html>

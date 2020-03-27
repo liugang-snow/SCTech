@@ -2,9 +2,10 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <th:block th:include="include :: header('维修工单列表')" />
+    <th:block th:include="include :: xmSelect-css" />
 </head>
 <body class="gray-bg">
-     <div class="container-div">
+    <div class="container-div">
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
@@ -16,32 +17,25 @@
                             </li>
                             <li>
                                 <p>维修分类：</p>
-                                <input type="text" name="sclassId"/>
-                            </li>
-                            <li>
-                                <p>紧急程度：</p>
-                                <select name="sclassEmergency" th:with="type=${@dict.getType('ser_emergency_type')}">
-                                    <option value="">所有</option>
-                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-                                </select>
-                            </li>
-                            <li>
-                                <p>报修地址：</p>
-                                <input type="text" name="areaName"/>
-                            </li>
-                            <li class="select-time">
-                                <p>报修时间：</p>
-                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginRepairDate]"/>
-                                <span>-</span>
-                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endRepairDate]"/>
+                                <div id="sclassId" class="div-xm-select-search"></div>
                             </li>
                             <li>
                                 <p>联系人：</p>
                                 <input type="text" name="repairContacts"/>
                             </li>
                             <li>
+                                <p>报修地址：</p>
+                                <div id="areaId" class="div-xm-select-search"></div>
+                            </li>
+                            <li class="select-time">
+                                <p>报修时间：</p>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginRepairDate]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endRepairDate]"/>
+                            </li>                           
+                            <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="refresh()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                             </li>
                         </ul>
                     </div>
@@ -68,13 +62,16 @@
         </div>
     </div>
     <th:block th:include="include :: footer" />
+    <th:block th:include="include :: xmSelect-js" />
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('equipment:sercard:edit')}]];
         var removeFlag = [[${@permission.hasPermi('equipment:sercard:remove')}]];
         var sclassEmergencyDatas = [[${@dict.getType('ser_emergency_type')}]];
+        var scardOriginDatas = [[${@dict.getType('ser_origin_type')}]];
         var prefix = ctx + "equipment/sercard";
-        var prefixe = ctx + "equipment/serexpense";
-
+        var prefixe = ctx + "equipment/serexpense";       
+        var sclass, arae;
+        
         $(function() {
             var options = {
                 url: prefix + "/list",
@@ -107,14 +104,6 @@
                     }
                 },
                 {
-                    field : 'areaName', 
-                    title : '报修地址'
-                },
-                {
-                    field : 'repairDate', 
-                    title : '报修时间'
-                },
-                {
                     field : 'repairContacts', 
                     title : '联系人'
                 },
@@ -123,26 +112,57 @@
                     title : '联系电话'
                 },
                 {
+                    field : 'scardOrigin', 
+                    title : '报修来源',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(scardOriginDatas, value);
+                     }
+                },
+                {
+                    field : 'areaName', 
+                    title : '报修地址'
+                },
+                {
+                    field : 'repairDate', 
+                    title : '报修时间'
+                },
+                {
                     title: '操作',
                     align: 'center',
                     formatter: function(value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.scardId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-info btn-xs" href="javascript:void(0)" onclick="openExpense(\'' + row.scardId + '\')"><i class="fa fa-money"></i>维修花费</a> ');
-                        actions.push('<a class="btn btn-warning btn-xs" href="javascript:void(0)" onclick="openEvaluation(\'' + row.scardId + '\')"><i class="fa fa-pencil"></i>维修评价</a> ');
+                        actions.push('<a class="btn btn-primary btn-xs" href="javascript:void(0)" onclick="openReceive(\'' + row.scardId + '\')"><i class="fa fa-clone"></i>受理指派</a> ');
+                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="openRepair(\'' + row.scardId + '\')"><i class="fa fa-legal"></i>维修</a> ');
+                        actions.push('<a class="btn btn-info btn-xs" href="javascript:void(0)" onclick="openExpense(\'' + row.scardId + '\')"><i class="fa fa-money"></i>维修清单</a> ');
+                        actions.push('<a class="btn btn-warning btn-xs" href="javascript:void(0)" onclick="openEvaluation(\'' + row.scardId + '\')"><i class="fa fa-thumbs-o-up"></i>维修评价</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.scardId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
                 }]
             };
             $.table.init(options);
+            
+            sclass = $.xmselect.initSearchTree("sclassId", ctx + "equipment/serclass/treeData");            
+            area = $.xmselect.initSearchTree("areaId", ctx + "equipment/equarea/treeData");
         });
+        
+        function openReceive(scardId){
+        	var url = prefix + '/receive/' + scardId;
+		    $.modal.openTab("受理指派", url);
+        }
+        
+        function openRepair(scardId){
+        	var url = prefix + '/repair/' + scardId;
+		    $.modal.open("维修", url, 950);
+        }
         
         function openExpense(scardId){
 		    var url = prefixe + '/expenses/' + scardId;
 		    var options = {
-		    		title: "维修花费",
+		    		title: "维修清单",
 		    		url: url,
+		    		width: 950,
 		    		btn: ['关闭'],
        				yes: function (index, layero) {
        	                layer.close(index);
@@ -153,8 +173,15 @@
         
         function openEvaluation(scardId){
 		    var url = prefix + '/evaluation/' + scardId;
-		    $.modal.open("维修评价", url);
-        }     
+		    $.modal.open("维修评价", url, 950);
+        }  
+        
+        //清空函数重写
+        function refresh(){
+        	sclass.setValue([ ]);
+        	area.setValue([ ]);
+        	$.form.reset();
+        }
     </script>
 </body>
 </html>

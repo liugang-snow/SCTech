@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('维修工单查询')" />
+    <th:block th:include="include :: xmSelect-css" />
+</head>
+<body class="gray-bg">
+    <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                	<div class="select-list">
+                        <ul>
+                            <li>
+                                <p>维修单号：</p>
+                                <input type="text" name="scardCode"/>
+                            </li>
+                            <li>
+                                <p>维修分类：</p>
+                                <div id="sclassId" class="div-xm-select-search"></div>
+                            </li>
+                            <li>
+                                <p>紧急程度：</p>
+                                <select name="sclassEmergency" th:with="type=${@dict.getType('ser_emergency_type')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>联系人：</p>
+                                <input type="text" name="repairContacts"/>
+                            </li>
+                            <li>
+                                <p>联系电话：</p>
+                                <input type="text" name="repairPhone"/>
+                            </li>
+                            <li>
+                                <p>报修来源：</p>
+                                <select name="scardOrigin" th:with="type=${@dict.getType('ser_origin_type')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <p>报修部门：</p>
+                                <div id="deptId" class="div-xm-select-search"></div>
+                            </li>
+                            <li>
+                                <p>报修地址：</p>
+                                <div id="areaId" class="div-xm-select-search"></div>
+                            </li>
+                            <li class="select-time">
+                                <p>报修时间：</p>
+                                <input type="text" class="time-input" id="beginRepairDate" placeholder="开始时间" name="params[beginRepairDate]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endRepairDate" placeholder="结束时间" name="params[endRepairDate]"/>
+                            </li> 
+                            <li>
+                                <p>报修内容：</p>
+                                <input type="text" name="repairDescription"/>
+                            </li> 
+                            <li class="select-time">
+                                <p>创建时间：</p>
+                                <input type="text" class="time-input" id="beginTime" placeholder="开始时间" name="params[beginTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+                            </li>
+                            <li>
+                                <p>创建人：</p>
+                                <input type="text" name="createBy"/>
+                            </li>                    
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="refresh()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-warning" onclick="$.table.exportExcel()">
+                    <i class="fa fa-download"></i> 导出
+                 </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: xmSelect-js" />
+    <script th:inline="javascript">
+	    var sclassEmergencyDatas = [[${@dict.getType('ser_emergency_type')}]];
+	    var scardOriginDatas = [[${@dict.getType('ser_origin_type')}]];
+	    var prefix = ctx + "equipment/sercard";    
+	    var sclass, dept, arae;
+	    
+	    $(function() {
+	        var options = {
+	            url: prefix + "/list",
+	            exportUrl: prefix + "/export",
+	            modalName: "维修工单",
+	            columns: [{
+	                field : 'scardId', 
+	                title : 'ID',
+	                visible: false
+	            },
+	            {
+                    title : '序号',
+                    formatter: function (value, row, index) {
+                		return $.table.serialNumber(index);
+                	}
+                },
+	            {
+	                field : 'scardCode', 
+	                title : '维修单号'
+	            },
+	            {
+	                field : 'sclassName', 
+	                title : '维修分类'
+	            },
+	            {
+	                field : 'sclassEmergency', 
+	                title : '紧急程度',
+	                formatter: function(value, row, index) {
+	                   return $.table.selectDictLabel(sclassEmergencyDatas, value);
+	                }
+	            },
+	            {
+	                field : 'repairContacts', 
+	                title : '联系人'
+	            },
+	            {
+	                field : 'repairPhone', 
+	                title : '联系电话'
+	            },
+	            {
+                    field : 'scardOrigin', 
+                    title : '报修来源',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(scardOriginDatas, value);
+                     }
+                },
+                {
+	                field : 'deptName', 
+	                title : '报修部门'
+	            },
+	            {
+	                field : 'areaName', 
+	                title : '报修地址'
+	            },
+	            {
+	                field : 'repairDate', 
+	                title : '报修时间'
+	            },
+	            {
+	                field : 'repairDescription', 
+	                title : '报修内容',
+	                formatter:$.commons.tooltip20
+	            },
+	            {
+                    field : 'createTime', 
+                    title : '创建时间'
+                },
+                {
+                    field : 'createBy', 
+                    title : '创建人'
+                },
+	            {
+	                title: '操作',
+	                align: 'center',
+	                formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-info btn-xs" href="javascript:void(0)" onclick="searchView(\'' + row.scardId + '\')"><i class="fa fa-search"></i>查看</a> ');
+                        return actions.join('');
+                    }
+	            }]
+	        };
+	        $.table.init(options);
+	        
+	        sclass = $.xmselect.initSearchTree("sclassId", ctx + "equipment/serclass/treeData");   
+	        dept = $.xmselect.initSearchTree("deptId", ctx + "system/dept/treeData");
+	        area = $.xmselect.initSearchTree("areaId", ctx + "equipment/equarea/treeData");
+	    });
+	     
+	    /* 工单查询-查看 */
+		function searchView(scardId) {
+		    var url = prefix + '/searchView/' + scardId;
+		    $.modal.openTab("设备查看", url);
+		}
+	    
+	    //清空函数重写
+	    function refresh(){
+	    	sclass.setValue([ ]);
+	    	dept.setValue([ ]);
+	    	area.setValue([ ]);
+	    	$.form.reset();
+	    }
+    </script>
+   </body>
+</html>

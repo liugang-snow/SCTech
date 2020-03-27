@@ -20,7 +20,6 @@ public class EquClass extends TreeEntity
     private Long classId;
 
     /** Guid */
-    @Excel(name = "Guid")
     private String classGuid;
 
     /** 设备分类编码 */

@@ -59,24 +59,63 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="equName != null  and equName != ''"> 
             	and e.equ_name like concat('%', #{equName}, '%')
             </if>
+            <if test="classId != null "> 
+            	and (e.class_id = #{classId} or e.class_id in ( select class_id from equ_class where find_in_set (#{classId},ancestors) ))
+            </if>
+            <if test="params.beginCount != null and params.beginCount != ''"><!-- 数量检索 -->
+				and e.equ_count &gt;= #{params.beginCount}
+			</if>
+			<if test="params.endCount != null and params.endCount != ''"><!-- 数量检索 -->
+				and e.equ_count &lt;= #{params.endCount}
+			</if>
+			<if test="params.beginSprice != null and params.beginSprice != ''"><!-- 单价检索 -->
+				and e.equ_sprice &gt;= #{params.beginSprice}
+			</if>
+			<if test="params.endSprice != null and params.endSprice != ''"><!-- 单价检索 -->
+				and e.equ_sprice &lt;= #{params.endSprice}
+			</if>
             <if test="params.beginPrice != null and params.beginPrice != ''"><!-- 总价检索 -->
 				and e.equ_price &gt;= #{params.beginPrice}
 			</if>
 			<if test="params.endPrice != null and params.endPrice != ''"><!-- 总价检索 -->
 				and e.equ_price &lt;= #{params.endPrice}
 			</if>
-			<if test="deptName != null  and deptName != ''"> 
-            	and d.dept_name like concat('%', #{deptName}, '%')
+            <if test="contractName != null  and contractName != ''"> 
+            	and h.con_name like concat('%', #{contractName}, '%')
             </if>
             <if test="supplierName != null  and supplierName != ''"> 
             	and s.sup_name like concat('%', #{supplierName}, '%')
             </if>
-            <if test="contractName != null  and contractName != ''"> 
-            	and h.con_name like concat('%', #{contractName}, '%')
+            <if test="equBrand != null  and equBrand != ''"> 
+            	and e.equ_brand like concat('%', #{equBrand}, '%')
             </if>
+            <if test="equParam != null  and equParam != ''"> 
+            	and e.equ_param like concat('%', #{equParam}, '%')
+            </if>
+            <if test="deptId != null  and deptId != ''"> 
+            	and (e.dept_id = #{deptId} or e.dept_id in ( select dept_id from sys_dept where find_in_set (#{deptId},ancestors) ))
+           	</if>
+           	<if test="equAdmin != null  and equAdmin != ''"> 
+            	and e.equ_admin like concat('%', #{equAdmin}, '%')
+            </if>
+            <if test="params.beginEquTime != null and params.beginEquTime != ''"><!-- 采购时间检索 -->
+				and date_format(e.equ_time,'%y%m%d') &gt;= date_format(#{params.beginEquTime},'%y%m%d')
+			</if>
+			<if test="params.endEquTime != null and params.endEquTime != ''"><!-- 采购时间检索 -->
+				and date_format(e.equ_time,'%y%m%d') &lt;= date_format(#{params.endEquTime},'%y%m%d')
+			</if>
+			<if test="params.startYear != null and params.startYear != ''"><!-- 使用年限检索 -->
+				and e.equ_year &gt;= #{params.startYear}
+			</if>
+			<if test="params.endYear != null and params.endYear != ''"><!-- 使用年限检索 -->
+				and e.equ_year &lt;= #{params.endYear}
+			</if>
             <if test="equStatus != null  and equStatus != ''"> 
             	and e.equ_status = #{equStatus}
-            </if>          
+            </if>  
+            <if test="areaId != null "> 
+            	and (e.area_id = #{areaId} or e.area_id in ( select area_id from equ_area where find_in_set (#{areaId},ancestors) ))
+            </if>        
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
 				and date_format(e.create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
 			</if>
@@ -85,9 +124,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 			<if test="createBy != null  and createBy != ''"> 
             	and e.create_by like concat('%', #{createBy}, '%')
-            </if>
-            <if test="classId != null  and classId != ''"> 
-            	and (e.class_id = #{classId} or e.class_id in ( select s.class_id from equ_class s where find_in_set (#{classId},ancestors) ))
             </if>
             and e.del_flag = '0'
             order by e.create_time desc

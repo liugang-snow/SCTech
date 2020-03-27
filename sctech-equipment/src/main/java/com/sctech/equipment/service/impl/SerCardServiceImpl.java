@@ -1,8 +1,6 @@
 package com.sctech.equipment.service.impl;
 
 import java.util.List;
-import java.util.UUID;
-
 import com.sctech.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,7 +54,6 @@ public class SerCardServiceImpl implements ISerCardService
     @Override
     public int insertSerCard(SerCard serCard)
     {
-		serCard.setScardGuid(UUID.randomUUID().toString().replace("-",""));
         serCard.setCreateTime(DateUtils.getNowDate());
         return serCardMapper.insertSerCard(serCard);
     }

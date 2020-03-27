@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('受理指派')" />
+    <th:block th:include="include :: Labelauty-css" />
+    <th:block th:include="include :: xmSelect-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-receive-edit" th:object="${serCard}">
+        	<input id="scardId" name="scardId" th:field="*{scardId}" type="hidden">
+        	<h4 class="form-header h4">工单信息</h4>
+            <div class="form-group">    
+                <label class="col-sm-2 control-label">维修单号：</label>
+                <div class="col-sm-3">
+                	<div class="form-control-static color-slategray" th:text="${serCard?.scardCode}"></div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-2 control-label">维修分类：</label>
+                <div class="col-sm-3">
+                	<div class="form-control-static color-slategray" th:text="${serCard?.sclassName}"></div>
+                </div>
+                <label class="col-sm-2 control-label">紧急程度：</label>
+                <div class="col-sm-3">
+                	<div class="form-control-static color-slategray" th:text="${@dict.getLabel('ser_emergency_type', serCard.sclassEmergency)}"></div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-2 control-label">维修来源：</label>
+                <div class="col-sm-3">
+                	<div class="form-control-static color-slategray" th:text="${@dict.getLabel('ser_origin_type', serCard.scardOrigin)}"></div>
+                </div>   
+                <label class="col-sm-2 control-label">报修时间：</label>
+                <div class="col-sm-3">
+                	<div class="form-control-static color-slategray" th:text="${#dates.format(serCard.repairDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-2 control-label">联系人：</label>
+                <div class="col-sm-3">
+                    <div class="form-control-static color-slategray" th:text="${serCard?.repairContacts}"></div>
+                </div>   
+                <label class="col-sm-2 control-label">联系电话：</label>
+                <div class="col-sm-3">
+                    <div class="form-control-static color-slategray" th:text="${serCard?.repairPhone}"></div>
+                </div>
+            </div>
+            <div class="form-group">    
+            	<label class="col-sm-2 control-label">报修部门：</label>
+                <div class="col-sm-3">
+                	<div class="form-control-static color-slategray" th:text="${serCard?.deptName}"></div>
+                </div> 
+                <label class="col-sm-2 control-label">报修地址：</label>
+                <div class="col-sm-3">
+                	<div class="form-control-static color-slategray" th:text="${serCard?.areaName}"></div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-2 control-label">报修内容：</label>
+                <div class="col-sm-8">
+                    <div class="form-control-static color-slategray" th:text="${serCard?.repairDescription}"></div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-2 control-label">登记人：</label>
+                <div class="col-sm-3">
+                	<div class="form-control-static color-slategray" th:text="${serCard?.createBy}"></div>
+                </div>   
+                <label class="col-sm-2 control-label">登记时间：</label>
+                <div class="col-sm-3">
+                	<div class="form-control-static color-slategray" th:text="${#dates.format(serCard.createTime, 'yyyy-MM-dd HH:mm:ss')}"></div>
+                </div>
+            </div>
+          
+            <h4 class="form-header h4">受理指派</h4>
+            <div class="form-group">    
+                <label class="col-sm-2 control-label">审核结果：</label>
+                <div class="col-sm-8">
+                	<ul class="dowebok" th:with="type=${@dict.getType('audit_type')}">
+                    	<li th:each="dict : ${type}"><input type="radio" name="audit" th:data-labelauty="${dict.dictLabel}" th:value="${dict.dictValue}" th:checked="${dict.default}"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-2 control-label">审核意见：</label>
+                <div class="col-sm-8">
+                    <textarea name="auditOpinion" class="form-control" maxlength="500" placeholder="请输入审核意见" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="form-group" id="div-team">    
+                <label class="col-sm-2 control-label">维修班组：</label>
+            	<div class="col-sm-3">
+            		<input id="teamIdtemp" type="hidden" th:value="${serCard?.teamId}"/>
+            		<div id="teamId" class="div-xm-select-edit"></div>
+            	</div>   
+                <label class="col-sm-2 control-label">维修班组：</label>
+            	<div class="col-sm-3">
+            		<input id="staffIdstemp" type="hidden" th:value="${serCard?.staffIds}"/>
+            		<div id="staffIds" class="div-xm-select-edit"></div>
+            	</div>
+            </div>
+            <div class="form-group" id="div-repair">    
+                <label class="col-sm-2 control-label">要求完成时间：</label>
+            	<div class="col-sm-3">
+                    <div class="input-group date">
+                    	<input type="text" class="form-control time-input" id="requireDate" name="requireDate" th:value="${#dates.format(serCard.requireDate, 'yyyy-MM-dd HH:mm:ss')}" data-type="datetime" placeholder="yyyy-MM-dd HH:mm:ss">
+                    	<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-sm btn-primary" onclick="submitSave()"><i class="fa fa-check"></i>保 存 </button>&nbsp;
+            <button type="button" class="btn btn-sm btn-success" onclick="submitHandler()"><i class="fa fa-send"></i>提 交 </button>&nbsp;
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: Labelauty-js" />
+    <th:block th:include="include :: xmSelect-js" />
+    <script type="text/javascript">
+    	var prefix = ctx + "equipment/sercard";
+    	var team, staff;
+    
+	    $(function(){
+	    	$(':input[name="audit"]').labelauty();	    	
+	    	audit();	    	
+	    	var options = {
+            		el: "#teamId",
+            		name: "teamId",
+            		initValue: [$("#teamIdtemp").val()],
+            		on: function(data){
+						if(data.isAdd){							
+							var check = data.change.slice(0, 1);
+							$("#teamIdtemp").val(check[0].id);
+							$("#staffIdstemp").val("");
+							initStaffs();
+							return check;
+						}
+					}
+            }
+            team = $.xmselect.initEditTree(options, ctx + "equipment/serteam/treeData");	    	
+	    	initStaffs();
+	    });
+	    
+	    $('input:radio[name="audit"]').click(function(){
+	    	audit();
+	    });
+	    
+	    function audit(){	    	
+	    	var checkValue = $('input:radio[name="audit"]:checked').val();
+	        if (checkValue == "1") {
+	        	$("#div-team").show();
+	        	$("#div-repair").show();
+	        } else {
+	        	$("#div-team").hide();
+	        	$("#div-repair").hide();
+	        }
+	    }
+	    
+	    function initStaffs(){
+	    	var teamId = $("#teamIdtemp").val();
+	    	var arry = $("#staffIdstemp").val().split(',');
+	    	var options = {
+            		el: "#staffIds",
+            		name: "staffIds",
+            		initValue: arry,
+            		prop: {
+						name: 'userName',
+						value: 'staffId',
+					},
+            }
+	    	staff = $.xmselect.init(options, ctx + "equipment/serstaff/selectSerStaffAll/" + teamId);
+	    }
+	    
+	    function submitSave() {
+            if ($.validate.form()) {
+            	var data = $('#form-receive-edit').serializeArray();
+            	if ($('input:radio[name="audit"]:checked').val() == "2"){
+            		data.pop();data.pop();//删除最后两个元素
+            	}
+                $.operate.save(prefix + "/edit", data);
+            }
+        }
+	    
+	    function submitHandler() {
+	    	$.modal.alert("工作流尚未整合,提交功能暂时无法使用！", "sad");
+        }
+    </script>
+</body>
+</html>

@@ -80,6 +80,9 @@ public class SerCard extends BaseEntity
     /** 维修人员 */
     private String staffIds;
 
+    /** 要求完成时间 */
+    private Date requireDate;
+    
     /** 维修完成时间 */
     private Date finishDate;
 
@@ -260,6 +263,15 @@ public class SerCard extends BaseEntity
     {
         return staffIds;
     }
+    public void setRequireDate(Date requireDate) 
+    {
+        this.requireDate = requireDate;
+    }
+
+    public Date getRequireDate() 
+    {
+        return requireDate;
+    }
     public void setFinishDate(Date finishDate) 
     {
         this.finishDate = finishDate;
@@ -332,6 +344,7 @@ public class SerCard extends BaseEntity
             .append("repairDescription", getRepairDescription())
             .append("teamId", getTeamId())
             .append("staffId", getStaffIds())
+            .append("requireDate", getRequireDate())
             .append("finishDate", getFinishDate())
             .append("finishDescription", getFinishDescription())
             .append("serEvaluation", getSerEvaluation())

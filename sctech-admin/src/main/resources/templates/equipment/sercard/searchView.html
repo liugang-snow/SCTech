@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('维修工单查看')" />
+    <th:block th:include="include :: Labelauty-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    	<div class="btn-group-sm" role="group" style="margin-bottom: 10px">
+			<button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
+		</div>
+		<form class="form-horizontal m" id="form-evaluation-edit" th:object="${serCard}">
+			<input type="hidden" id="scardId" name="scardId" th:value="${scardId}">
+			<div class="panel blank-panel">
+		        <div class="panel-heading">
+		            <div class="panel-options">
+		                <ul class="nav nav-tabs">
+		                    <li class="active"><a data-toggle="tab" href="#tab-1"><i class="fa fa-tasks"></i></a>
+		                    </li>
+		                    <li class=""><a data-toggle="tab" href="#tab-2"><i class="fa fa-clone"></i></a>
+		                    </li>
+		                    <li class=""><a data-toggle="tab" href="#tab-3"><i class="fa fa-legal"></i></a>
+		                    </li>
+		                    <li class=""><a data-toggle="tab" href="#tab-4"><i class="fa fa-money"></i></a>
+		                    </li>
+		                    <li class=""><a data-toggle="tab" href="#tab-5"><i class="fa fa-thumbs-o-up"></i></a>
+		                    </li>
+		                </ul>
+		            </div>
+		        </div>
+		        <div class="panel-body">
+		            <div class="tab-content">		            
+		                <div id="tab-1" class="tab-pane active">
+		                	<h4 class="form-header h4">工单信息</h4>
+		                	<div class="form-group">    
+				                <label class="col-sm-2 control-label">维修单号：</label>
+				                <div class="col-sm-3">
+				                	<div class="form-control-static color-slategray" th:text="${serCard?.scardCode}"></div>
+				                </div>
+				            </div>
+				            <div class="form-group">    
+				                <label class="col-sm-2 control-label">维修分类：</label>
+				                <div class="col-sm-3">
+				                	<div class="form-control-static color-slategray" th:text="${serCard?.sclassName}"></div>
+				                </div>
+				                <label class="col-sm-2 control-label">紧急程度：</label>
+				                <div class="col-sm-3">
+				                	<div class="form-control-static color-slategray" th:text="${@dict.getLabel('ser_emergency_type', serCard.sclassEmergency)}"></div>
+				                </div>
+				            </div>
+				            <div class="form-group">    
+				                <label class="col-sm-2 control-label">维修来源：</label>
+				                <div class="col-sm-3">
+				                	<div class="form-control-static color-slategray" th:text="${@dict.getLabel('ser_origin_type', serCard.scardOrigin)}"></div>
+				                </div>   
+				                <label class="col-sm-2 control-label">报修时间：</label>
+				                <div class="col-sm-3">
+				                	<div class="form-control-static color-slategray" th:text="${#dates.format(serCard.repairDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
+				                </div>
+				            </div>
+				            <div class="form-group">    
+				                <label class="col-sm-2 control-label">联系人：</label>
+				                <div class="col-sm-3">
+				                    <div class="form-control-static color-slategray" th:text="${serCard?.repairContacts}"></div>
+				                </div>   
+				                <label class="col-sm-2 control-label">联系电话：</label>
+				                <div class="col-sm-3">
+				                    <div class="form-control-static color-slategray" th:text="${serCard?.repairPhone}"></div>
+				                </div>
+				            </div>
+				            <div class="form-group">    
+				            	<label class="col-sm-2 control-label">报修部门：</label>
+				                <div class="col-sm-3">
+				                	<div class="form-control-static color-slategray" th:text="${serCard?.deptName}"></div>
+				                </div> 
+				                <label class="col-sm-2 control-label">报修地址：</label>
+				                <div class="col-sm-3">
+				                	<div class="form-control-static color-slategray" th:text="${serCard?.areaName}"></div>
+				                </div>
+				            </div>
+				            <div class="form-group">    
+				                <label class="col-sm-2 control-label">报修内容：</label>
+				                <div class="col-sm-8">
+				                    <div class="form-control-static color-slategray" th:text="${serCard?.repairDescription}"></div>
+				                </div>
+				            </div>
+				            <div class="form-group">    
+				                <label class="col-sm-2 control-label">登记人：</label>
+				                <div class="col-sm-3">
+				                	<div class="form-control-static color-slategray" th:text="${serCard?.createBy}"></div>
+				                </div>   
+				                <label class="col-sm-2 control-label">登记时间：</label>
+				                <div class="col-sm-3">
+				                	<div class="form-control-static color-slategray" th:text="${#dates.format(serCard.createTime, 'yyyy-MM-dd HH:mm:ss')}"></div>
+				                </div>
+				            </div>
+		                </div>
+		                <div id="tab-2" class="tab-pane">
+		                	<h4 class="form-header h4">受理指派</h4>
+		                	<div class="form-group">    
+				                <label class="col-sm-2 control-label">维修班组：</label>
+				                <div class="col-sm-3">
+				                    <div class="form-control-static color-slategray" th:text="${serCard?.teamName}"></div>
+				                </div>   
+				                <label class="col-sm-2 control-label">维修人员：</label>
+				                <div class="col-sm-3">
+				                    <div class="form-control-static color-slategray" th:text="${serStaffsName}"></div>
+				                </div>
+				            </div>
+				            <div class="form-group">    
+				                <label class="col-sm-2 control-label">要求完成时间：</label>
+				                <div class="col-sm-8">
+				                    <div class="form-control-static color-slategray" th:text="${#dates.format(serCard.requireDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
+				                </div>   
+				            </div>
+		                </div>
+		                <div id="tab-3" class="tab-pane">
+		                	<h4 class="form-header h4">维修</h4>
+		                	<div class="form-group">    
+				                <label class="col-sm-2 control-label">维修完成时间：</label>
+				                <div class="col-sm-8">
+				                    <div class="form-control-static color-slategray" th:text="${#dates.format(serCard.finishDate, 'yyyy-MM-dd HH:mm:ss')}"></div>
+				                </div>
+				            </div>
+				            <div class="form-group">    
+				                <label class="col-sm-2 control-label">维修结果：</label>
+				                <div class="col-sm-8">
+				                    <div class="form-control-static color-slategray" th:text="${serCard?.finishDescription}"></div>
+				                </div>
+				            </div>
+		                </div>
+		                <div id="tab-4" class="tab-pane">
+		                	<h4 class="form-header h4">维修清单</h4>
+		                	<div class="ibox">
+			                    <div class="ibox-title">
+			                        <h5>备品备件</h5>
+			                    </div>
+			                    <div class="ibox-content">	
+			                    </div>
+			                </div>
+			                <div class="ibox">
+			                    <div class="ibox-title">
+			                        <h5>维修花费</h5>
+			                    </div>
+			                    <div class="ibox-content ibox-content-notop">	
+			                    	<div class="container-div">
+	        							<div class="row">
+						                    <div class="select-table table-striped select-table-notop">
+								                <table id="table-expense"></table>
+								            </div>	
+							            </div>
+						            </div>			        	
+			                    </div>
+			                </div>
+		                </div>
+		                <div id="tab-5" class="tab-pane">
+		                	<h4 class="form-header h4">维修评价</h4>
+		                	<div class="form-group">    
+				                <label class="col-sm-2 control-label">服务态度评价：</label>
+				                <div class="col-sm-8">
+				                    <ul class="dowebok" th:with="type=${@dict.getType('ser_evaluation_type')}">
+				                    	<li th:each="dict : ${type}"><input disabled type="radio" name="serEvaluation" th:data-labelauty="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{serEvaluation}"></li>
+				                    </ul>
+				                </div>
+				            </div>
+				            <div class="form-group">    
+				                <label class="col-sm-2 control-label">工作质量评价：</label>
+				                <div class="col-sm-8">
+				                	<ul class="dowebok" th:with="type=${@dict.getType('ser_evaluation_type')}">
+				                    	<li th:each="dict : ${type}"><input disabled type="radio" name="repEvaluation" th:data-labelauty="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{repEvaluation}"></li>
+				                    </ul>
+				                </div>
+				            </div>
+				            <div class="form-group">    
+				                <label class="col-sm-2 control-label">意见建议：</label>
+				                <div class="col-sm-8">
+				                	<div class="form-control-static color-slategray" th:text="${serCard?.serOpinion}"></div>
+				               	</div>
+				            </div>
+		                </div>
+		            </div>	            
+		        </div>
+	        </div>
+        </form>        
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: Labelauty-js" />
+    <script type="text/javascript">
+    	var prefix = ctx + "equipment/serexpense";
+    
+	    $(function(){
+	    	$(':input[name="serEvaluation"]').labelauty();
+	    	$(':input[name="repEvaluation"]').labelauty();
+	    	
+	    	var options = {
+	    			id: 'table-expense',
+	    			url: prefix + "/list",
+	                modalName: "维修花费",
+	                showSearch: false,
+	                showRefresh: false,
+			        showToggle: false,
+			        showColumns: false,
+			        pagination: false,
+			        showFooter: true,
+	                columns: [
+                	{
+                        title : '序号',
+                        formatter: function (value, row, index) {
+                    		return $.table.serialNumber(index);
+                    	},
+                    	footerFormatter:function () {
+					        return '合计';
+					    }
+                    },	
+	                {
+	                    field : 'expenseId', 
+	                    title : 'ID',
+	                    visible: false
+	                },
+	                {
+	                    field : 'expenseDesc', 
+	                    title : '项目描述'
+	                },
+	                {
+	                    field : 'expenseUnits', 
+	                    title : '计价单位'
+	                },
+	                {
+	                    field : 'expenseQuan', 
+	                    title : '数量(项)'
+	                },
+	                {
+	                    field : 'expensePrice', 
+	                    title : '单价(元)'
+	                },
+	                {
+	                    field : 'expenseSum', 
+	                    title : '金额(元)',
+	                    footerFormatter:function (value) {
+					    	var sum = 0;
+					        for (var i in value) {
+					        	sum += parseFloat(value[i].expenseSum);
+					        }
+					        return sum;
+					    }
+	                },
+	                {
+	                    field : 'remark', 
+	                    title : '备注'
+	                },
+	                ]
+	            };
+	            $.table.init(options);
+	    });
+    </script>
+</body>
+</html>

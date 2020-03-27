@@ -619,6 +619,12 @@ var table = {
         	        icon = 1;
         	    } else if (type == modal_status.FAIL) {
         	        icon = 2;
+        	    } else if (type == modal_status.LOCK) {
+        	        icon = 4;
+        	    } else if (type == modal_status.SAD) {
+        	        icon = 5;
+        	    } else if (type == modal_status.HAPPY) {
+        	        icon = 6;
         	    } else {
         	        icon = 3;
         	    }
@@ -1588,5 +1594,8 @@ web_status = {
 modal_status = {
     SUCCESS: "success",
     FAIL: "error",
-    WARNING: "warning"
+    WARNING: "warning",
+    LOCK: "lock",
+    SAD: "sad",
+    HAPPY: "happy"
 };
